@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/scivision/gitedu.svg?branch=master)](https://travis-ci.org/scivision/gitedu)
+
 # Git EDU
 
 Git and site-specific API (e.g. GitHub) utilities for managing large numbers (100+) of users for education and institutions.
@@ -9,7 +11,9 @@ For example:
 * mass-add per-project collaborators (AddGithubCollab.py)
 * duplicate (mirror) lots of repos (DuplicateGithubRepos.p)
 
-This was moved out of [GitUtils](https://github.com/scivision/gitutils) due to the site-specific and heavy API use, whereas GitUtils focuses more on plain agnostic Git tasks.
+This was moved out of 
+[GitUtils](https://github.com/scivision/gitutils) 
+due to the site-specific and heavy API use, whereas GitUtils focuses more on plain agnostic Git tasks.
 
 
 ## Mass duplicate GitHub repos

@@ -6,7 +6,7 @@ import tempfile
 from datetime import datetime
 import webbrowser
 from typing import Optional, Dict
-from .github_base import github_session, check_api_limit, repo_exists, last_commit_date
+from gitutils.github_base import github_session, check_api_limit, repo_exists, last_commit_date
 
 
 def repo_dupe(repos: Dict[str, str], oauth: Path,

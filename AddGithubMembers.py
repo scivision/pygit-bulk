@@ -30,8 +30,7 @@ def main():
 
         reponame = f'{p.stem}{row["TEAM #"]:02d}-{teamname}'
 
-        exists = repo_exists(op, reponame)
-        if not exists:
+        if not repo_exists(op, reponame):
             print('creating', reponame)
             op.create_repo(name=reponame, private=True)
 

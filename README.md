@@ -20,3 +20,13 @@ due to the site-specific and heavy API use, whereas GitUtils focuses more on pla
 
 `DuplicateGithubRepos`
 based on spreadsheet input, mass duplicate GitHub repos.
+
+## API Key
+
+Python GitHub [API](https://pypi.org/project/PyGithub/)
+
+Most users will need a GitHub API token, as the unauthenticated API access is severly limited.
+
+1. [Generate](https://github.com/settings/tokens) GitHub API token with ONLY the `user:email` permission.
+2. Copy that text string to a secure location on your computer.
+

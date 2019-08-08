@@ -15,12 +15,14 @@ import gitutils.github_base as gb
 
 
 def main():
-    p = ArgumentParser(description='Duplice Github repos from spreadsheet input')
-    p.add_argument('fn', help='spreadsheet filename')
-    p.add_argument('oauth', help='Oauth filename')
-    p.add_argument('-u', '--username', help='username or organization to create duplicate under')
-    p.add_argument('-s', '--stem', help='beginning of duplicated repo names')
-    p.add_argument('-w', '--sheet', help='excel sheet to process', required=True)
+    p = ArgumentParser(description="Duplice Github repos from spreadsheet input")
+    p.add_argument("fn", help="spreadsheet filename")
+    p.add_argument("oauth", help="Oauth filename")
+    p.add_argument(
+        "-u", "--username", help="username or organization to create duplicate under"
+    )
+    p.add_argument("-s", "--stem", help="beginning of duplicated repo names")
+    p.add_argument("-w", "--sheet", help="excel sheet to process", required=True)
     p = p.parse_args()
 
     repos = gb.read_repos(p.fn, p.sheet)
@@ -28,5 +30,5 @@ def main():
     gu.repo_dupe(repos, p.oauth, p.username, p.stem)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

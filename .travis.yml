@@ -1,18 +1,6 @@
 language: python
-group: travis_latest
 
-git:
-  depth: 25
-  quiet: true
-
-python:
-- 3.6
-
-os:
-- linux
-
-install:
-- pip install -e .[tests]
+install: pip install -e .[tests]
 
 script:
 - flake8

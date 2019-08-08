@@ -5,24 +5,33 @@ import logging
 import tempfile
 from datetime import datetime
 import webbrowser
+import shutil
 from typing import Optional, Dict
-from gitutils.github_base import (
-    github_session,
-    check_api_limit,
-    repo_exists,
-    last_commit_date,
-)
+
+import gitutils.github_base as gitbase
+
+git = shutil.which("git")
+if not git:
+    raise ImportError("Git not found")
 
 
 def repo_dupe(repos: Dict[str, str], oauth: Path, orgname: str = None, stem: str = ""):
     """
-    fn: .xlsx file with repos to duplicate
-    oauth: Path to your GitHub Oauth token  https://github.com/settings/tokens
-    orgname: create repos under Organization instead of username
-    stem: what to start new repo name with
+    Duplicate GitHub repos AND their wikis
+
+    Parameters
+    ----------
+    repos: dict of str, str
+        GitHub username, reponame to duplicate
+    oauth: pathlib.Path
+        GitHub Oauth token  https://github.com/settings/tokens
+    orgname: str
+        create repos under Organization instead of username
+    stem: str
+        what to start new repo name with
     """
     # %% authenticate
-    sess = github_session(oauth)
+    sess = gitbase.github_session(oauth)
     guser = sess.get_user()
 
     org = None
@@ -40,17 +49,17 @@ def repo_dupe(repos: Dict[str, str], oauth: Path, orgname: str = None, stem: str
 
     username = op.login
 
-    if not check_api_limit(sess):
+    if not gitbase.check_api_limit(sess):
         raise RuntimeError("GitHub API limit exceeded")
     # %% prepare to loop over repos
     for email, oldurl in repos.items():
-        if not check_api_limit(sess):
+        if not gitbase.check_api_limit(sess):
             raise RuntimeError("GitHub API limit exceeded")
 
         oldurl = oldurl.replace("https", "ssh")
         oldname = "/".join(oldurl.split("/")[-2:]).split(".")[0]
 
-        oldtime = last_commit_date(sess, oldname)
+        oldtime = gitbase.last_commit_date(sess, oldname)
         if oldtime is None:
             continue
 
@@ -76,7 +85,7 @@ def gitdupe(
         mirrorname += ".wiki.git"
         try:
             subprocess.check_call(
-                ["git", "ls-remote", "--exit-code", oldurl], stdout=subprocess.DEVNULL
+                [git, "ls-remote", "--exit-code", oldurl], stdout=subprocess.DEVNULL
             )
         except subprocess.CalledProcessError:
             logging.error(f"{oldurl} has no Wiki")
@@ -86,7 +95,7 @@ def gitdupe(
     newurl = f"ssh://github.com/{newname}"
 
     if not iswiki:
-        exists = repo_exists(op, mirrorname)
+        exists = gitbase.repo_exists(op, mirrorname)
         if exists:
             newrepo = op.get_repo(mirrorname)
             if newrepo.pushed_at >= oldtime:
@@ -95,7 +104,7 @@ def gitdupe(
     else:
         try:
             subprocess.check_call(
-                ["git", "ls-remote", "--exit-code", newurl],
+                [git, "ls-remote", "--exit-code", newurl],
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,
             )
@@ -108,7 +117,7 @@ def gitdupe(
     with tempfile.TemporaryDirectory() as d:
         tmprepo = Path(d)
         # 1. bare clone
-        cmd = ["git", "clone", oldurl] if iswiki else ["git", "clone", "--bare", oldurl]
+        cmd = [git, "clone", oldurl] if iswiki else ["git", "clone", "--bare", oldurl]
         subprocess.check_call(cmd, stdout=subprocess.DEVNULL, cwd=tmprepo)
 
         # 2. create new repo
@@ -123,7 +132,7 @@ def gitdupe(
             pwd = tmprepo / (oldurl.split("/")[-1])
             pwd = pwd.with_suffix(".git")
 
-            cmd = ["git", "push", "--mirror", newurl]
+            cmd = [git, "push", "--mirror", newurl]
             subprocess.check_call(cmd, cwd=pwd)
 
 
@@ -134,9 +143,7 @@ def dupewiki(prepo: Path, oldurl: str, newurl: str):
     pwd = prepo / (oldurl.split("/")[-1]).split(".git")[0]
 
     subprocess.check_call(
-        ["git", "remote", "set-url", "origin", newurl],
-        cwd=pwd,
-        stdout=subprocess.DEVNULL,
+        [git, "remote", "set-url", "origin", newurl], cwd=pwd, stdout=subprocess.DEVNULL
     )
 
     browseurl = newurl
@@ -144,4 +151,4 @@ def dupewiki(prepo: Path, oldurl: str, newurl: str):
     webbrowser.open_new_tab(browseurl)
     sleep(10.0)  # TODO: use suprocess.run() instead of webbrowser
 
-    subprocess.check_call(["git", "push", "-f"], cwd=pwd)
+    subprocess.check_call([git, "push", "-f"], cwd=pwd)

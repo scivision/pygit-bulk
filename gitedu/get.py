@@ -1,4 +1,4 @@
-from typing import List, Dict
+import typing
 import re
 
 from gitutils.github_base import check_api_limit, connect_github
@@ -6,7 +6,7 @@ from gitutils.github_base import check_api_limit, connect_github
 
 def get_collabs(
     orgname: str, oauth: str = None, pat: str = None
-) -> Dict[str, List[str]]:
+) -> typing.Dict[str, typing.List[str]]:
     op, sess = connect_github(oauth, orgname)
 
     if not check_api_limit(sess):

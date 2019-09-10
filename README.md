@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/scivision/gitedu.svg?branch=master)](https://travis-ci.com/scivision/gitedu)
+[![Actions Status](https://github.com/scivision/gitedu/workflows/ci/badge.svg)](https://github.com/scivision/gitedu/actions)
 
 # Git EDU
 

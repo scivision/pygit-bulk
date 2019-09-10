@@ -22,6 +22,7 @@ def main():
     p.add_argument("-stem", help="beginning of repo names", default="")
     p.add_argument("-orgname", help="Github Organization", required=True)
     p.add_argument("-col", help="columns for Username, teamname", nargs="+", required=True)
+    p.add_argument("-private", action="store_true")
     p = p.parse_args()
 
     fn = Path(p.fn).expanduser()
@@ -30,38 +31,26 @@ def main():
     # %%
     op, sess = connect_github(p.oauth, p.orgname)
 
-    if teams.ndim == 2:
-        name_num(teams, p.stem, op, sess)
-    elif teams.ndim == 1:
-        name(teams, p.stem, op, sess)
-    else:
-        raise ValueError("not sure the format of teams / xlsx")
+    name_num(teams, p.stem, p.private, op, sess)
 
 
-def name(teams: pandas.Series, stem: str, op, sess):
-    for teamname in teams:
-        if not check_api_limit(sess):
-            raise RuntimeError("GitHub API limit exceeded")
-
-        reponame = f"{stem}{teamname}"
-        if repo_exists(op, reponame):
-            continue
-
-        print("creating", reponame)
-        op.create_repo(name=reponame, private=False)
-
-
-def name_num(teams: pandas.DataFrame, stem: str, op, sess):
+def name_num(teams: pandas.DataFrame, stem: str, private: bool, op, sess):
     for teamname, teamnum in teams.items():
         if not check_api_limit(sess):
             raise RuntimeError("GitHub API limit exceeded")
 
-        reponame = f"{stem}{teamnum:02d}-{teamname}"
+        if teams.ndim == 2:
+            reponame = f"{stem}{teamnum:02d}-{teamname}"
+        elif teams.ndim == 1:
+            reponame = f"{stem}{teamnum}"
+        else:
+            raise ValueError("not sure the format of teams / xlsx")
+
         if repo_exists(op, reponame):
             continue
 
         print("creating", reponame)
-        op.create_repo(name=reponame, private=False)
+        op.create_repo(name=reponame, private=private)
 
 
 if __name__ == "__main__":

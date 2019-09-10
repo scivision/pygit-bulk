@@ -18,9 +18,7 @@ def main():
     p = ArgumentParser(description="Duplice Github repos from spreadsheet input")
     p.add_argument("fn", help="spreadsheet filename")
     p.add_argument("oauth", help="Oauth filename")
-    p.add_argument(
-        "-u", "--username", help="username or organization to create duplicate under"
-    )
+    p.add_argument("-u", "--username", help="username or organization to create duplicate under")
     p.add_argument("-s", "--stem", help="beginning of duplicated repo names")
     p.add_argument("-w", "--sheet", help="excel sheet to process", required=True)
     p = p.parse_args()

@@ -27,7 +27,7 @@ import gitutils.github_base as gb
 
 
 def main():
-    p = ArgumentParser(description="Set GitHub repos to Private matching pattern")
+    p = ArgumentParser()
     p.add_argument("userorgname", help="GitHub username / organizations")
     p.add_argument("oauth", help="Oauth filename")
     p.add_argument("pattern", help="make private repos with name starting with this string")

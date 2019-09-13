@@ -15,7 +15,7 @@ import gitutils.github_base as gb
 
 
 def main():
-    p = ArgumentParser(description="Duplice Github repos from spreadsheet input")
+    p = ArgumentParser()
     p.add_argument("fn", help="spreadsheet filename")
     p.add_argument("oauth", help="Oauth filename")
     p.add_argument("-u", "--username", help="username or organization to create duplicate under")

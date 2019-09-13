@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 """
-mass add team members to repos
+mass add team members to repos, optionally creating new repos
 
-python CreateGithubTeamRepos.py my.xlsx ~/.ssh/orgOauth -stem sw -orgname myorg -col B C
+    python CreateGithubTeamRepos.py my.xlsx ~/.ssh/orgOauth -stem sw -orgname myorg -col B C
+
+    python CreateGithubTeamRepos.py my.xlsx ~/.ssh/orgOauth -stem sw -orgname myorg -col B D E
 
 oauth token must have "write:org" and public_repo (or repo for private) permissions
 https://developer.github.com/v3/repos/#oauth-scope-requirements
@@ -15,6 +17,7 @@ from argparse import ArgumentParser
 
 USERNAME = "GitHub"
 TEAMS = "Team"
+NAME = "Name"
 
 
 def main():
@@ -24,7 +27,8 @@ def main():
     p.add_argument("-stem", help="beginning of repo names", default="")
     p.add_argument("-orgname", help="Github Organization", required=True)
     p.add_argument("-col", help="columns for Username, teamname", nargs="+", required=True)
-    p.add_argument("-private", action="store_true")
+    p.add_argument("-private", help="create private repos", action="store_true")
+    p.add_argument("-create", help="create repo if not existing", action="store_true")
     p = p.parse_args()
 
     fn = Path(p.fn).expanduser()
@@ -34,19 +38,24 @@ def main():
         raise ValueError("need to have member names and team names. Check that -col argument matches spreadsheet.")
     # %%
     op, sess = connect_github(p.oauth, p.orgname)
+    if not check_api_limit(sess):
+        raise RuntimeError("GitHub API limit exceeded")
 
-    name_num(teams, p.stem, p.private, op, sess)
+    adder(teams, p.stem, p.private, p.create, op, sess)
 
 
-def name_num(teams: pandas.DataFrame, stem: str, private: bool, op, sess):
-    for _teamname, row in teams.iterrows():
-        if not check_api_limit(sess):
-            raise RuntimeError("GitHub API limit exceeded")
+def adder(teams: pandas.DataFrame, stem: str, private: bool, create: bool, op, sess):
+    for _, row in teams.iterrows():
+        if row.size == 3:
+            reponame = f"{stem}{row[TEAMS]:02.0f}-{row[NAME]}"
+        elif row.size == 2:
+            reponame = f"{stem}{row[TEAMS]}"
+        else:
+            raise ValueError("I expect team number OR team number and team name")
 
-        reponame = f'{stem}{row["Team"]}'
         username = row[USERNAME]
 
-        if not repo_exists(op, reponame):
+        if create and not repo_exists(op, reponame):
             print("creating", reponame)
             op.create_repo(name=reponame, private=private)
 

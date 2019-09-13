@@ -4,7 +4,7 @@ mass create repos for teams
 
 example with spreadsheet with usernames in column C, teamname in column D
 
-    python CreateGithubTeamRepos.py my.xlsx ~/.ssh/orgOauth -stem sw -orgname myorg -col C D
+    python CreateGithubTeamRepos.py my.xlsx ~/.ssh/orgOauth myorg -stem sw -col C D
 
 oauth token must have "admin:org" and public_repo (or repo for private) permissions
 https://developer.github.com/v3/repos/#oauth-scope-requirements
@@ -22,8 +22,8 @@ def main():
     p = ArgumentParser()
     p.add_argument("fn", help=".xlsx with group info")
     p.add_argument("oauth", help="Oauth file")
+    p.add_argument("orgname", help="Github Organization")
     p.add_argument("-stem", help="beginning of repo names", default="")
-    p.add_argument("-orgname", help="Github Organization", required=True)
     p.add_argument("-col", help="columns for Username, teamname", nargs="+", required=True)
     p.add_argument("-private", help="create private repos", action="store_true")
     p = p.parse_args()

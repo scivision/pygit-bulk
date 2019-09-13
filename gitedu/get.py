@@ -1,28 +1,42 @@
 import typing
 import re
+import github
 
-from gitutils.github_base import check_api_limit, connect_github
 
+def get_collabs(
+    op: github.Organization, sess: github.Github, stem: str = None, regex: str = None
+) -> typing.Dict[str, typing.List[str]]:
+    """
+    get collaborators of a GitHub repo
 
-def get_collabs(orgname: str, oauth: str = None, pat: str = None) -> typing.Dict[str, typing.List[str]]:
-    op, sess = connect_github(oauth, orgname)
+    Parameters
+    ----------
 
-    if not check_api_limit(sess):
-        raise RuntimeError("GitHub API limit exceeded")
+    stem: str, optional
+        repo names starts with
+    regex: str, optional
+        regex pattern
 
+    Return
+    ------
+
+    collabs: dict of list of str
+        collaborators on all repos selected in organization
+    """
     orgmembers = [u.login for u in op.get_members()]
 
     collabs = {}
-    rpat = re.compile(pat) if pat else None
+    rpat = re.compile(regex) if regex else None
 
-    repos = op.get_repos()
-    for repo in repos:
+    for repo in op.get_repos():
         if rpat and not rpat.match(repo.name):
             continue
-
-        if not check_api_limit(sess):
-            raise RuntimeError("GitHub API limit exceeded")
+        elif stem and not repo.name.startswith(stem):
+            continue
 
         collabs[repo.name] = [u.login for u in repo.get_collaborators() if u.login not in orgmembers]
+
+    if not collabs:
+        raise ValueError(f"Did not find any repos in {op.login} with {stem} {regex}")
 
     return collabs

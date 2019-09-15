@@ -41,8 +41,6 @@ def main() -> typing.List[str]:
     userorg = gb.user_or_org(sess, P.user)
     # %% prepare to loop over repos
     repos = gb.get_repos(userorg)
-    if not repos:
-        raise SystemExit(f"no repos for {P.user}")
 
     to_act = (repo for repo in repos if repo.name.startswith(P.pattern))
 

@@ -37,8 +37,6 @@ def main():
     repos = gb.get_repos(userorg)
 
     to_modify = [repo for repo in repos if repo.name.startswith(P.pattern)]
-    if not to_modify:
-        raise SystemExit(f"no repos to modify under {P.user}/{P.pattern}")
 
     print("\ntype affirmative to remove all collaborators from\n", "\n".join([repo.full_name for repo in to_modify]))
     modify = input() == "affirmative"

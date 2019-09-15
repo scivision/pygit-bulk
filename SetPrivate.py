@@ -40,12 +40,8 @@ def main():
     userorg = gb.user_or_org(sess, P.userorgname)
     # %% prepare to loop over repos
     repos = gb.get_repos(userorg)
-    if not repos:
-        raise SystemExit(f"no repos for {P.user}")
 
     to_act = [repo for repo in repos if repo.name.startswith(P.pattern) and not repo.private]
-    if not to_act:
-        raise SystemExit(f"no repos left matching {P.user}/{P.pattern}")
 
     print("\ntype affirmative to make PRIVATE", "\n".join([repo.full_name for repo in to_act]))
     if input() != "affirmative":

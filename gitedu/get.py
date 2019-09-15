@@ -36,7 +36,4 @@ def get_collabs(
 
         collabs[repo.name] = [u.login for u in repo.get_collaborators() if u.login not in orgmembers]
 
-    if not collabs:
-        raise ValueError(f"Did not find any repos in {op.login} with {stem} {regex}")
-
     return collabs

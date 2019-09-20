@@ -24,7 +24,7 @@ def main():
     p.add_argument("oauth", help="Oauth file")
     p.add_argument("orgname", help="Github Organization")
     p.add_argument("-stem", help="beginning of repo names", default="")
-    p.add_argument("-col", help="columns for Username, teamname", nargs="+", required=True)
+    p.add_argument("-col", help="column(s) for TeamName OR TeamNumber, TeamName", nargs="+", required=True)
     p.add_argument("-private", help="create private repos", action="store_true")
     p = p.parse_args()
 

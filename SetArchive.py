@@ -36,14 +36,16 @@ def main():
     # %% prepare to loop over repos
     repos = gb.get_repos(userorg)
 
-    to_archive = [repo for repo in repos if repo.name.startswith(P.pattern) and not repo.archived]
+    to_act = [repo for repo in repos if repo.name.startswith(P.pattern) and not repo.archived]
+    if not to_act:
+        raise SystemExit(f"There were no repos left to archive with {P.pattern} in {P.user}")
 
     print("NOTE: presently, you can only UNarchive through the website manually.")
-    print("\ntype affirmative to ARCHIVE (make read-only)", "\n".join([repo.full_name for repo in to_archive]))
+    print("\ntype affirmative to ARCHIVE (make read-only)", "\n".join([repo.full_name for repo in to_act]))
     if input() != "affirmative":
         raise SystemExit("Aborted")
 
-    for repo in to_archive:
+    for repo in to_act:
         repo.edit(archived=True)
         print("archived", repo.full_name)
 

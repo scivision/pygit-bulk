@@ -3,14 +3,7 @@
 Plot number of commits in GitHub repos for a user/organization with repo names matching pattern
 
 Requires GitHub Oauth login with sufficient permissions "repo:public_repo" or "repo" for private repos.
-(admin:org Oauth does not work)
 
-if you get error
-
-    github.GithubException.UnknownObjectException: 404 {'message': 'Not Found',
-    'documentation_url': 'https://developer.github.com/v3/repos/#edit'}
-
-that typically means your Oauth key doesn't have adequte permissions.
 
 example
 
@@ -19,19 +12,20 @@ example
 
 As a first pass, just shows total LoC changed. Future: plot commit vs. time.
 """
-from argparse import ArgumentParser
+import argparse
 import typing
+from pathlib import Path
 
 try:
     from matplotlib.pyplot import figure, show
 except ImportError:
     figure = show = None
 
-import gitutils.github_base as gb
+import pygithubutils.base as gb
 import github.GithubException
 
 
-def main(user: str, oauth: str, pattern: str, only_empty: bool) -> typing.List[str]:
+def main(user: str, oauth: Path, pattern: str, only_empty: bool) -> typing.List[str]:
     # %% authentication
     sess = gb.github_session(oauth)
     gb.check_api_limit(sess)
@@ -76,7 +70,7 @@ def main(user: str, oauth: str, pattern: str, only_empty: bool) -> typing.List[s
 
 
 if __name__ == "__main__":
-    p = ArgumentParser()
+    p = argparse.ArgumentParser()
     p.add_argument("userorg", help="GitHub username / organizations")
     p.add_argument("oauth", help="Oauth filename")
     p.add_argument("pattern", help="repos with name starting with this string")

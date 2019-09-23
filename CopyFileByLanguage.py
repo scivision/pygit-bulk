@@ -14,7 +14,7 @@ from pathlib import Path
 from argparse import ArgumentParser
 import base64
 import github
-import gitutils.github_base as gb
+import pygithubutils.base as gb
 
 
 def main():

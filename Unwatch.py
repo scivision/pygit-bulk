@@ -11,11 +11,13 @@ example:
 
 If "-stem" is omitted, all repos in "orgname" are unwatched.
 """
-from argparse import ArgumentParser
-import gitutils.github_base as gb
+import argparse
+from pathlib import Path
+
+import pygithubutils.base as gb
 
 
-def main(oauth: str, orgname: str, stem: str):
+def main(oauth: Path, orgname: str, stem: str):
     # %% authentication
     user, sess = gb.connect_github(oauth)
     gb.check_api_limit(sess)
@@ -38,7 +40,7 @@ def main(oauth: str, orgname: str, stem: str):
 
 
 if __name__ == "__main__":
-    p = ArgumentParser()
+    p = argparse.ArgumentParser()
     p.add_argument("oauth", help="Oauth filename")
     p.add_argument("orgname", help="Github organization name to unwatch repos from")
     p.add_argument("-stem", help="unwatch repos starting with orgname/stem", default="")

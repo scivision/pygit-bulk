@@ -3,19 +3,9 @@
 Set all collaborator permission to "read" for a user/organization with repo names matching pattern.
 
 Requires GitHub Oauth login with sufficient permissions "repo:public_repo".
-(admin:org Oauth does not work)
-It's suggested you create an Oauth key for this, and then disable/delete this key permissions when done
-to avoid a security issue.
-
-if you get error
-
-    github.GithubException.UnknownObjectException: 404 {'message': 'Not Found',
-    'documentation_url': 'https://developer.github.com/v3/repos/#edit'}
-
-that typically means your Oauth key doesn't have adequte permissions.
 """
 from argparse import ArgumentParser
-import gitutils.github_base as gb
+import pygithubutils.base as gb
 import logging
 import webbrowser
 

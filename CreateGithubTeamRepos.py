@@ -10,7 +10,7 @@ oauth token must have "admin:org" and public_repo (or repo for private) permissi
 https://developer.github.com/v3/repos/#oauth-scope-requirements
 """
 import pandas
-from gitutils.github_base import connect_github, repo_exists, check_api_limit
+from pygithubutils.base import connect_github, repo_exists, check_api_limit
 from pathlib import Path
 from argparse import ArgumentParser
 

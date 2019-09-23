@@ -1,11 +1,13 @@
-[![Actions Status](https://github.com/scivision/gitedu/workflows/ci/badge.svg)](https://github.com/scivision/gitedu/actions)
+[![Actions Status](https://github.com/scivision/pygithub-utils/workflows/ci/badge.svg)](https://github.com/scivision/pygithub-utils/actions)
 
-# Git EDU
+# PyGitHub Utilities
 
-Git and site-specific API (e.g. GitHub) utilities for managing large numbers (100+) of users for education and institutions.
+GitHub API utilities for managing large numbers (10..1000) of users and repositories for education and institutions.
+GitHub v3 API is used via [PyGitHub](https://pypi.org/project/PyGithub/).
+For very large number of repos say 1000+, it may be more useful and fast to use the GraphQL GitHub v4 API.
 Input / output is often via spreadsheet, as a gateway to APIs of other services such as Blackboard.
 
-Note: Some of these tasks can also be done directly in
+This repository helps us avoid having to use
 [GitHub Education](https://education.github.com/).
 
 For example:
@@ -14,9 +16,25 @@ For example:
 * mass-add per-project collaborators (AddGithubCollab.py)
 * duplicate (mirror) lots of repos (DuplicateGithubRepos.p)
 
-This was moved out of
-[GitMC](https://github.com/scivision/gitutils)
-due to the site-specific and heavy API use, whereas GitUtils focuses more on plain agnostic Git tasks.
+We also maintain Python-based Git
+[utilities](https://github.com/scivision/gitutils).
+
+An important feature in
+```sh
+python CountGithubForks.py username
+```
+is showing which forks of your repos have had changes "ahead of" the parent repo.
+
+---
+
+Count how many total GitHub stars a GitHub account has:
+
+```sh
+python CountGithubStars.py username
+```
+
+That will take a couple seconds even for large numbers of repos.
+
 
 
 ## Mass duplicate GitHub repos
@@ -26,11 +44,9 @@ based on spreadsheet input, mass duplicate GitHub repos.
 
 ## API Key
 
-Python GitHub [API](https://pypi.org/project/PyGithub/)
+Users will need a GitHub API token, as the unauthenticated API access is severely limited.
 
-Most users will need a GitHub API token, as the unauthenticated API access is severly limited.
-
-1. [Generate](https://github.com/settings/tokens) GitHub API token with ONLY the `user:email` permission.
+1. [Generate](https://github.com/settings/tokens) GitHub API token with permission appropriate to the PyGitHub Utilities script being used.
 2. Copy that text string to a secure location on your computer.
 
 ### permissions

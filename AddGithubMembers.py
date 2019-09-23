@@ -10,7 +10,7 @@ oauth token must have "write:org" and public_repo (or repo for private) permissi
 https://developer.github.com/v3/repos/#oauth-scope-requirements
 """
 import pandas
-from gitutils.github_base import repo_exists, check_api_limit, connect_github
+from pygithubutils.base import repo_exists, check_api_limit, connect_github
 from pathlib import Path
 import warnings
 from argparse import ArgumentParser

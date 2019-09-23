@@ -4,26 +4,13 @@ Set Private GitHub repos for a user/organization with repo names matching patter
 
 Requires GitHub Oauth login with sufficient permissions "repo:public_repo" to make public private
 "repo" permission needed to see private.
-"admin:org" Oauth does not work.
-It's suggested you create an Oauth key for this, and then disable/delete this key permissions when done
-to avoid a security issue.
-To do this, including for Organizations, go to your
-Username, Settings, Developer Settings, Personal Access Tokens and set repo:public_repo.
-For organization private repos, you need "repo" permissions on the Oauth token.
-
-if you get error
-
-    github.GithubException.UnknownObjectException: 404 {'message': 'Not Found',
-    'documentation_url': 'https://developer.github.com/v3/repos/#edit'}
-
-that typically means your Oauth key doesn't have adequate permissions.
 
 example:
 
     python SetPrivate.py myorg ~/.ssh/Oauth foo-
 """
 from argparse import ArgumentParser
-import gitutils.github_base as gb
+import pygithubutils.base as gb
 
 
 def main():

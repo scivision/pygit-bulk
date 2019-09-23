@@ -8,7 +8,7 @@ import webbrowser
 import shutil
 from typing import Optional, Dict
 
-import gitutils.github_base as gitbase
+from .base import github_session, check_api_limit, last_commit_date, repo_exists
 
 git = shutil.which("git")
 if not git:
@@ -31,7 +31,7 @@ def repo_dupe(repos: Dict[str, str], oauth: Path, orgname: str = None, stem: str
         what to start new repo name with
     """
     # %% authenticate
-    sess = gitbase.github_session(oauth)
+    sess = github_session(oauth)
     guser = sess.get_user()
 
     org = None
@@ -49,17 +49,17 @@ def repo_dupe(repos: Dict[str, str], oauth: Path, orgname: str = None, stem: str
 
     username = op.login
 
-    if not gitbase.check_api_limit(sess):
+    if not check_api_limit(sess):
         raise RuntimeError("GitHub API limit exceeded")
     # %% prepare to loop over repos
     for email, oldurl in repos.items():
-        if not gitbase.check_api_limit(sess):
+        if not check_api_limit(sess):
             raise RuntimeError("GitHub API limit exceeded")
 
         oldurl = oldurl.replace("https", "ssh")
         oldname = "/".join(oldurl.split("/")[-2:]).split(".")[0]
 
-        oldtime = gitbase.last_commit_date(sess, oldname)
+        oldtime = last_commit_date(sess, oldname)
         if oldtime is None:
             continue
 
@@ -86,7 +86,7 @@ def gitdupe(oldurl: str, oldtime: Optional[datetime], username: str, mirrorname:
     newurl = f"ssh://github.com/{newname}"
 
     if not iswiki:
-        exists = gitbase.repo_exists(op, mirrorname)
+        exists = repo_exists(op, mirrorname)
         if exists:
             newrepo = op.get_repo(mirrorname)
             if newrepo.pushed_at >= oldtime:

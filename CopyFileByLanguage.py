@@ -13,8 +13,9 @@ https://developer.github.com/v3/repos/#oauth-scope-requirements
 from pathlib import Path
 from argparse import ArgumentParser
 import base64
+
 import github
-import pygithubutils.base as gb
+import pygithubutils as gb
 
 
 def main():

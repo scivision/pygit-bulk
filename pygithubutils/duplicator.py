@@ -6,7 +6,9 @@ import tempfile
 from datetime import datetime
 import webbrowser
 import shutil
-from typing import Optional, Dict
+import typing as T
+
+import github
 
 from .base import github_session, check_api_limit, last_commit_date, repo_exists
 
@@ -15,7 +17,7 @@ if not git:
     raise ImportError("Git not found")
 
 
-def repo_dupe(repos: Dict[str, str], oauth: Path, orgname: str = None, stem: str = ""):
+def repo_dupe(repos: T.Dict[str, str], oauth: Path, orgname: str = None, stem: str = ""):
     """
     Duplicate GitHub repos AND their wikis
 
@@ -36,6 +38,7 @@ def repo_dupe(repos: Dict[str, str], oauth: Path, orgname: str = None, stem: str
 
     org = None
     if orgname:
+        assert isinstance(guser, github.AuthenticatedUser.AuthenticatedUser)
         orgs = list(guser.get_orgs())
         for o in orgs:
             if o.login == orgname:
@@ -45,6 +48,7 @@ def repo_dupe(repos: Dict[str, str], oauth: Path, orgname: str = None, stem: str
         assert org is not None
         op = org
     else:
+        assert isinstance(guser, github.Organization.Organization)
         op = guser
 
     username = op.login
@@ -71,7 +75,7 @@ def repo_dupe(repos: Dict[str, str], oauth: Path, orgname: str = None, stem: str
         sleep(0.1)
 
 
-def gitdupe(oldurl: str, oldtime: Optional[datetime], username: str, mirrorname: str, op, iswiki: bool = False):
+def gitdupe(oldurl: str, oldtime: T.Optional[datetime], username: str, mirrorname: str, op, iswiki: bool = False):
 
     if iswiki:
         oldurl += ".wiki.git"

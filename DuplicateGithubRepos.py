@@ -11,7 +11,7 @@ Assumes you have an SSH key loaded for git push --mirror step
 """
 from argparse import ArgumentParser
 import pygithubutils.duplicator as gu
-import pygithubutils.base as gb
+import pygithubutils as gb
 
 
 def main():

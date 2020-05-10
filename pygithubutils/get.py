@@ -1,10 +1,11 @@
 import typing
 import re
+
 import github
 
 
 def get_collabs(
-    op: github.Organization, sess: github.Github, stem: str = None, regex: str = None
+    op: github.Organization.Organization, sess: github.Github, stem: str = None, regex: str = None
 ) -> typing.Dict[str, typing.List[str]]:
     """
     get collaborators of a GitHub repo

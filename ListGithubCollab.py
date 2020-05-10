@@ -15,8 +15,7 @@ import pandas
 from pathlib import Path
 import itertools
 
-from pygithubutils.get import get_collabs
-from pygithubutils.base import check_api_limit, connect_github
+from pygithubutils import check_api_limit, connect_github, get_collabs
 
 
 def main(P):

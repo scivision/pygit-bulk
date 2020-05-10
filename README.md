@@ -1,9 +1,10 @@
-[![Actions Status](https://github.com/scivision/pygithub-utils/workflows/ci/badge.svg)](https://github.com/scivision/pygithub-utils/actions)
-
 # PyGitHub Utilities
 
+![Actions Status](https://github.com/scivision/pygithub-utils/workflows/ci/badge.svg)
+
 GitHub API utilities for managing large numbers (10..1000) of users and repositories for education and institutions.
-GitHub v3 API is used via [PyGitHub](https://pypi.org/project/PyGithub/).
+GitHub v3 API is used via actively developed and growing
+[PyGitHub](https://pypi.org/project/PyGithub/).
 For very large number of repos say 1000+, it may be more useful and fast to use the GraphQL GitHub v4 API.
 Input / output is often via spreadsheet, as a gateway to APIs of other services such as Blackboard.
 
@@ -20,6 +21,7 @@ We also maintain Python-based Git
 [utilities](https://github.com/scivision/gitutils).
 
 An important feature in
+
 ```sh
 python CountGithubForks.py username
 ```
@@ -34,7 +36,6 @@ python CountGithubStars.py username
 ```
 
 That will take a couple seconds even for large numbers of repos.
-
 
 
 ## Mass duplicate GitHub repos
@@ -64,7 +65,9 @@ For organization private repos, you need "repo" permissions on the Oauth token.
 
 if you get error
 
-    github.GithubException.UnknownObjectException: 404 {'message': 'Not Found',
-    'documentation_url': 'https://developer.github.com/v3/repos/#edit'}
+```
+github.GithubException.UnknownObjectException: 404 {'message': 'Not Found',
+'documentation_url': 'https://developer.github.com/v3/repos/#edit'}
+```
 
 that typically means your Oauth key doesn't have adequate permissions.

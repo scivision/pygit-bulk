@@ -5,9 +5,10 @@ Set all collaborator permission to "read" for a user/organization with repo name
 Requires GitHub Oauth login with sufficient permissions "repo:public_repo".
 """
 from argparse import ArgumentParser
-import pygithubutils.base as gb
 import logging
 import webbrowser
+
+import pygithubutils as gb
 
 
 def main():

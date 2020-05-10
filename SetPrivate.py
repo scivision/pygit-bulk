@@ -10,7 +10,7 @@ example:
     python SetPrivate.py myorg ~/.ssh/Oauth foo-
 """
 from argparse import ArgumentParser
-import pygithubutils.base as gb
+import pygithubutils as gb
 
 
 def main():

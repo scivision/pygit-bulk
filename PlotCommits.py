@@ -21,7 +21,7 @@ try:
 except ImportError:
     figure = show = None
 
-import pygithubutils.base as gb
+import pygithubutils as gb
 import github.GithubException
 
 

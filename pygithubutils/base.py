@@ -1,15 +1,16 @@
 """
 GitHub API utilities
 """
-import github
 from pathlib import Path
 from datetime import datetime
 import logging
-import typing
+import typing as T
 import pandas
 
-TYPE_USERORG = typing.Union[github.NamedUser.NamedUser, github.Organization.Organization]
-TYPE_AUTH = typing.Union[github.AuthenticatedUser.AuthenticatedUser, github.Organization.Organization]
+import github
+
+TYPE_USERORG = T.Union[github.NamedUser.NamedUser, github.Organization.Organization]
+TYPE_AUTH = T.Union[github.AuthenticatedUser.AuthenticatedUser, github.Organization.Organization]
 
 
 def check_api_limit(g: github.Github = None) -> bool:
@@ -73,7 +74,7 @@ def github_session(oauth: Path = None) -> github.Github:
     return g
 
 
-def connect_github(oauth: Path, orgname: str = None) -> typing.Tuple[TYPE_AUTH, github.Github]:
+def connect_github(oauth: Path, orgname: str = None) -> T.Tuple[TYPE_AUTH, github.Github]:
     """
     retrieve organizations or users from GitHub
 
@@ -96,6 +97,7 @@ def connect_github(oauth: Path, orgname: str = None) -> typing.Tuple[TYPE_AUTH, 
 
     org = None
     if orgname:
+        assert isinstance(guser, github.AuthenticatedUser.AuthenticatedUser)
         orgs = list(guser.get_orgs())
         for o in orgs:
             if o.login == orgname:
@@ -106,6 +108,7 @@ def connect_github(oauth: Path, orgname: str = None) -> typing.Tuple[TYPE_AUTH, 
             raise ValueError(f"Organization {org} authentication could not be established")
         op = org
     else:
+        assert isinstance(guser, github.Organization.Organization)
         op = guser
 
     return op, sess
@@ -173,7 +176,7 @@ def last_commit_date(sess: github.Github, name: str) -> datetime:
     return time
 
 
-def repo_isempty(repo: github.Repository) -> bool:
+def repo_isempty(repo: github.Repository.Repository) -> bool:
     """
     is a GitHub repo empty?
 
@@ -198,9 +201,9 @@ def repo_isempty(repo: github.Repository) -> bool:
     return empty
 
 
-def user_or_org(g: github.Github, user: str) -> TYPE_USERORG:
+def user_or_org(g: github.Github, user: str) -> T.Any:
     """
-    Determines if user is a GitHub organizaition or standard user.
+    Determines if user is a GitHub organization or standard user.
     This is relevant to getting private repos.
 
     Parameters
@@ -221,13 +224,12 @@ def user_or_org(g: github.Github, user: str) -> TYPE_USERORG:
         raise ValueError(f"{user} not found on GitHub\n{e}")
 
     try:
-        h = g.get_organization(user)
+        return g.get_organization(user)
     except github.GithubException:
-        h = g.get_user(user)
-    return h
+        return g.get_user(user)
 
 
-def read_repos(fn: Path, sheet: str) -> typing.Dict[str, str]:
+def read_repos(fn: Path, sheet: str) -> T.Dict[str, str]:
     """
     make pandas.Series of email/id, Git url from spreadsheet
 
@@ -252,7 +254,7 @@ def read_repos(fn: Path, sheet: str) -> typing.Dict[str, str]:
     return repos.to_dict()
 
 
-def get_repos(userorg: TYPE_USERORG) -> typing.Iterable[github.Repository.Repository]:
+def get_repos(userorg: TYPE_USERORG) -> T.Iterable[github.Repository.Repository]:
     """
     get list of Repositories for a user or organization
 

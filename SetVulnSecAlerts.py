@@ -7,7 +7,8 @@ Requires GitHub Oauth login with sufficient permissions "repo:public_repo" or "r
 This requires PyGithub > 1.43.8, added in https://github.com/PyGithub/PyGithub/commit/8abd50e225767c63c5f61231095fee0c8684d7b4
 """
 import argparse
-import pygithubutils.base as gb
+
+import pygithubutils as gb
 
 
 def main(username: str, oauth: str, stem: str):

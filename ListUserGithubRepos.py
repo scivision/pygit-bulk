@@ -11,7 +11,8 @@ Without Oauth, you will only see public repos
 """
 from argparse import ArgumentParser
 import webbrowser
-import pygithubutils.base as gb
+
+import pygithubutils as gb
 
 
 def main():

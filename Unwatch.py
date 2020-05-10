@@ -14,12 +14,14 @@ If "-stem" is omitted, all repos in "orgname" are unwatched.
 import argparse
 from pathlib import Path
 
-import pygithubutils.base as gb
+import github
+import pygithubutils as gb
 
 
 def main(oauth: Path, orgname: str, stem: str):
     # %% authentication
     user, sess = gb.connect_github(oauth)
+    assert isinstance(user, github.AuthenticatedUser.AuthenticatedUser), "unwatch is for users only, not orgs"
     gb.check_api_limit(sess)
     # %% get organization handle
     org = gb.user_or_org(sess, orgname)

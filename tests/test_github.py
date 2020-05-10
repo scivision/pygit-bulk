@@ -5,8 +5,10 @@ maximum Github username length ~39 characters
 import pytest
 import random
 import string
+
 import github.GithubException as gexc
-import pygithubutils.base as pgu
+
+import pygithubutils as pgu
 
 random_username = "".join(random.choice(string.ascii_lowercase) for i in range(32))
 OK_username = "scivision"
@@ -28,4 +30,4 @@ def test_get_repos():
 
 
 if __name__ == "__main__":
-    pytest.main(["-x", __file__])
+    pytest.main([__file__])

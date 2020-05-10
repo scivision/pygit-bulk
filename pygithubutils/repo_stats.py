@@ -44,14 +44,15 @@ def repo_prober(
     # %% prepare to loop over repos
     repos = get_repos(userorg)
 
-    counts = []
+    counts: List[Tuple[str, int, int]] = []
     ahead: List[Tuple[str, int]] = []
 
     for repo in repos:
         if not starsonly:
             ahead += fork_prober(repo, sess, ahead, branch, verbose)
 
-        counts.append((repo.name, repo.forks_count, repo.stargazers_count))
+        counts.append((repo.name, repo.forks_count, repo.stargazers_count))  # type: ignore
+        # FIXME: bug in PyGithub fixed by https://github.com/PyGithub/PyGithub/pull/1513
 
         check_api_limit(sess)
 
@@ -109,11 +110,11 @@ def fork_prober(
 
         try:
             comp = repo.compare(master.commit.sha, fmaster.commit.sha)
-        except github.GithubException as e:
-            if e.data["message"].startswith("No common ancestor"):
-                continue
+        except github.GithubException as excp:
+            # if excp.data["message"].startswith("No common ancestor"):
+            #     continue
 
-            logging.error(f"{repo.full_name} {fork.full_name}  {e}")
+            logging.error(f"{repo.full_name} {fork.full_name}  {excp}")
             continue
 
         if comp.ahead_by:

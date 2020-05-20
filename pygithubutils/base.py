@@ -42,7 +42,8 @@ def check_api_limit(g: github.Github = None) -> bool:
     if api_remaining == 0:
         raise ConnectionRefusedError(f"GitHub rate limit exceeded: {api_remaining} / {api_max}. Try again after {treset} UTC.")
         ok = False
-    elif api_remaining < 10:
+    # it's not elif !
+    if api_remaining < 10:
         logging.warning(ResourceWarning(f"approaching GitHub API limit, {api_remaining} / {api_max} remaining until {treset} UTC."))
     else:
         logging.debug(f"GitHub API limit: {api_remaining} / {api_max} remaining until {treset} UTC.")
@@ -137,7 +138,6 @@ def repo_exists(user: TYPE_AUTH, reponame: str) -> bool:
             exists = True
     except github.GithubException as e:
         logging.info(str(e))
-        pass
 
     return exists
 

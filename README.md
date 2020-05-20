@@ -1,6 +1,7 @@
 # PyGitHub Utilities
 
 ![Actions Status](https://github.com/scivision/pygithub-utils/workflows/ci/badge.svg)
+[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/scivision/pygithub-utils.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/scivision/pygithub-utils/context:python)
 
 GitHub API utilities for managing large numbers (10..1000) of users and repositories for education and institutions.
 GitHub v3 API is used via actively developed and growing

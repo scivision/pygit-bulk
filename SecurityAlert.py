@@ -20,7 +20,7 @@ def main(username: str, oauth: str, stem: str, disable: bool):
     # %% prepare to loop over repos
     repos = gb.get_repos(userorg)
 
-    to_act = (repo for repo in repos if repo.name.startswith(stem) and not repo.archived and not repo.get_vulnerability_alert())
+    to_act = (repo for repo in repos if repo.name.startswith(stem) and not repo.archived)
 
     for repo in to_act:
         if disable:
@@ -34,7 +34,7 @@ def main(username: str, oauth: str, stem: str, disable: bool):
 
 
 if __name__ == "__main__":
-    p = argparse.ArgumentParser()
+    p = argparse.ArgumentParser(description="Enable/Disable GitHub security alerts")
     p.add_argument("user", help="GitHub username / organizations")
     p.add_argument("oauth", help="Oauth filename")
     p.add_argument("-disable", help="instead of enabling alerts, disable alerts", action="store_true")

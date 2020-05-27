@@ -1,8 +1,12 @@
 #!/usr/bin/env python
 """
-Archive GitHub repos for a user/organization with repo names matching pattern
+Archive GitHub repos for a user/organization with repo names matching pattern.
 
-Requires GitHub Oauth login with sufficient permissions "repo:public_repo" or "repo" for private repos.
+It is NOT possible to unarchive via API, you would have to UNarchive by hand:
+https://developer.github.com/v3/repos/#input
+
+Requires GitHub Oauth login with
+permissions "repo:public_repo" or "repo" for private repos.
 """
 from argparse import ArgumentParser
 import pygithubutils.base as gb
@@ -28,8 +32,8 @@ def main():
         raise SystemExit(f"There were no repos left to archive with {P.pattern} in {P.user}")
 
     print("NOTE: presently, you can only UNarchive through the website manually.")
-    print("\ntype affirmative to ARCHIVE (make read-only)", "\n".join([repo.full_name for repo in to_act]))
-    if input() != "affirmative":
+    print("\ntype yes to ARCHIVE (make read-only)", "\n".join([repo.full_name for repo in to_act]))
+    if input() != "yes":
         raise SystemExit("Aborted")
 
     for repo in to_act:

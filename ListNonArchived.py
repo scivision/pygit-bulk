@@ -27,7 +27,7 @@ def main(username: str, oauth: str, stem: str):
 
 
 if __name__ == "__main__":
-    p = argparse.ArgumentParser(description="Enable/Disable GitHub security alerts")
+    p = argparse.ArgumentParser(description="List all non-archived repos")
     p.add_argument("user", help="GitHub username / organizations")
     p.add_argument("oauth", help="Oauth filename")
     p.add_argument("-stem", help="list repos with name starting with this string", default="")

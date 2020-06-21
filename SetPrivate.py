@@ -14,7 +14,7 @@ import pygithubutils as gb
 
 
 def main():
-    p = ArgumentParser()
+    p = ArgumentParser(description="Set Private GitHub repos for a user/organization with repo names matching pattern")
     p.add_argument("userorgname", help="GitHub username / organizations")
     p.add_argument("oauth", help="Oauth filename")
     p.add_argument("pattern", help="make private repos with name starting with this string")

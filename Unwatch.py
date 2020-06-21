@@ -42,7 +42,7 @@ def main(oauth: Path, orgname: str, stem: str):
 
 
 if __name__ == "__main__":
-    p = argparse.ArgumentParser()
+    p = argparse.ArgumentParser(description="Unwatch repos for your Github user ")
     p.add_argument("oauth", help="Oauth filename")
     p.add_argument("orgname", help="Github organization name to unwatch repos from")
     p.add_argument("-stem", help="unwatch repos starting with orgname/stem", default="")

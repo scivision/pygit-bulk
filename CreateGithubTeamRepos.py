@@ -19,7 +19,7 @@ NAME = "Name"
 
 
 def main():
-    p = ArgumentParser()
+    p = ArgumentParser(description="mass create repos for teams")
     p.add_argument("fn", help=".xlsx with group info")
     p.add_argument("oauth", help="Oauth file")
     p.add_argument("orgname", help="Github Organization")

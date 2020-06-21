@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-mass copy files by langauge.
+mass copy files by language.
 Useful for templating CI by language e.g. .github/workflows/ci_python.yml etc.
 
 example with spreadsheet with usernames in column C, teamname in column D
@@ -19,7 +19,7 @@ import pygithubutils as gb
 
 
 def main():
-    p = ArgumentParser()
+    p = ArgumentParser(description="mass copy files by language")
     p.add_argument("copyfn", help="file to copy into repos")
     p.add_argument("targetfn", help="path to copy file into in repos")
     p.add_argument("language", help="coding language to consider (case-sensitive)")

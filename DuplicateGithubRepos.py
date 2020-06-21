@@ -15,7 +15,7 @@ import pygithubutils as gb
 
 
 def main():
-    p = ArgumentParser()
+    p = ArgumentParser(description="Duplicate repos specified in spreadsheet")
     p.add_argument("fn", help="spreadsheet filename")
     p.add_argument("oauth", help="Oauth filename")
     p.add_argument("-u", "--username", help="username or organization to create duplicate under")

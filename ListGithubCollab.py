@@ -27,7 +27,7 @@ def main(P):
 
 
 if __name__ == "__main__":
-    p = ArgumentParser()
+    p = ArgumentParser(description="Lists collaborators for GitHub repo or repos starting with pattern")
     p.add_argument("oauth", help="Oauth filename")
     p.add_argument("orgname", help="Github organization name")
     p.add_argument("-stem", help="reponame starts with")

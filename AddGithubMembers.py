@@ -21,7 +21,7 @@ NAME = "Name"
 
 
 def main():
-    p = ArgumentParser()
+    p = ArgumentParser(description="mass add team members to repos, optionally creating new repos")
     p.add_argument("fn", help=".xlsx with group info")
     p.add_argument("oauth", help="Oauth file")
     p.add_argument("-stem", help="beginning of repo names", default="")

@@ -18,7 +18,7 @@ def run_query(query: str, token_file: Path):
 
 
 if __name__ == "__main__":
-    p = argparse.ArgumentParser()
+    p = argparse.ArgumentParser(description="Totals up stars with GitHub v4 API")
     p.add_argument("oauth", help="path to oauth key")
     p.add_argument("username", help="GitHub username(s) to count stars for", nargs="+")
     p = p.parse_args()

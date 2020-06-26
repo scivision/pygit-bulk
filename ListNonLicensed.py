@@ -21,8 +21,16 @@ def main(username: str, oauth: str, stem: str):
     # %% prepare to loop over repos
     repos = gb.get_repos(userorg)
 
-    # this one-liner filters repos to find those owned by user/org and not a fork
-    to_act = (repo for repo in repos if repo.name.startswith(stem) and not repo.fork and repo.owner.login == userorg.login)
+    # filter repos
+    to_act = (
+        repo
+        for repo in repos
+        if repo.name.startswith(stem)
+        and repo.name != ".github"
+        and not repo.fork
+        and not repo.archived
+        and repo.owner.login == userorg.login
+    )
 
     for repo in to_act:
         try:

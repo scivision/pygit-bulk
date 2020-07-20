@@ -1,7 +1,7 @@
-#!/usr/bin/env python
 """
 maximum Github username length ~39 characters
 """
+
 import pytest
 import random
 import string
@@ -27,7 +27,3 @@ def test_get_repos():
         pytest.skip("GitHub API limit exceeded")
 
     assert len(list(repos)) > 0
-
-
-if __name__ == "__main__":
-    pytest.main([__file__])

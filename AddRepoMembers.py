@@ -2,9 +2,9 @@
 """
 mass add team members to repos, optionally creating new repos
 
-    python AddRepoMembers.py my.xlsx ~/.ssh/orgOauth -stem sw -orgname myorg -col B C
+    python AddRepoMembers.py my.xlsx ~/.ssh/orgOauth -stem sw -orgname myorg -col GitHub Team
 
-    python AddRepoMembers.py my.xlsx ~/.ssh/orgOauth -stem sw -orgname myorg -col B D E
+    python AddRepoMembers.py my.xlsx ~/.ssh/orgOauth -stem sw -orgname myorg -col GitHub Team TeamName
 
 oauth token must have "write:org" and public_repo (or repo for private) permissions
 https://developer.github.com/v3/repos/#oauth-scope-requirements

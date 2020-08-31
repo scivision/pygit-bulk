@@ -2,17 +2,17 @@
 """
 mass add team members to repos, optionally creating new repos
 
-    python CreateGithubTeamRepos.py my.xlsx ~/.ssh/orgOauth -stem sw -orgname myorg -col B C
+    python AddRepoMembers.py my.xlsx ~/.ssh/orgOauth -stem sw -orgname myorg -col B C
 
-    python CreateGithubTeamRepos.py my.xlsx ~/.ssh/orgOauth -stem sw -orgname myorg -col B D E
+    python AddRepoMembers.py my.xlsx ~/.ssh/orgOauth -stem sw -orgname myorg -col B D E
 
 oauth token must have "write:org" and public_repo (or repo for private) permissions
 https://developer.github.com/v3/repos/#oauth-scope-requirements
 """
 import pandas
-from pygithubutils import repo_exists, check_api_limit, connect_github
+import github
+from pygithubutils import repo_exists, team_exists, check_api_limit, connect_github
 from pathlib import Path
-import warnings
 from argparse import ArgumentParser
 
 USERNAME = "GitHub"
@@ -33,7 +33,13 @@ def main():
 
     fn = Path(p.fn).expanduser()
 
-    teams = pandas.read_excel(fn, usecols=",".join(p.col)).squeeze().dropna()
+    if fn.suffix in (".xls", ".xlsx"):
+        teams = pandas.read_excel(fn, usecols=p.col).squeeze().dropna()
+    elif fn.suffix == ".csv":
+        teams = pandas.read_csv(fn, usecols=p.col).squeeze().dropna()
+    else:
+        raise ValueError(f"Unknown file type {fn}")
+
     if not teams.ndim == 2:
         raise ValueError("need to have member names and team names. Check that -col argument matches spreadsheet.")
     # %%
@@ -47,26 +53,31 @@ def main():
 def adder(teams: pandas.DataFrame, stem: str, private: bool, create: bool, op, sess):
     for _, row in teams.iterrows():
         if row.size == 3:
-            reponame = f"{stem}{row[TEAMS]:02.0f}-{row[NAME]}"
+            repo_name = f"{stem}{row[TEAMS]:02.0f}-{row[NAME]}"
         elif row.size == 2:
-            reponame = f"{stem}{row[TEAMS]}"
+            repo_name = f"{stem}{row[TEAMS]}"
         else:
             raise ValueError("I expect team number OR team number and team name")
 
         username = row[USERNAME]
 
-        if create and not repo_exists(op, reponame):
-            print("creating", reponame)
-            op.create_repo(name=reponame, private=private)
+        if create:
+            if not repo_exists(op, repo_name):
+                print("creating repository", repo_name)
+                op.create_repo(name=repo_name, private=private)
 
-        repo = op.get_repo(reponame)
+            # NOTE: for now, each team has one repo of same name as team
+            if not team_exists(op, repo_name):
+                print("creating Team", repo_name)
+                op.create_team(repo_name, op.get_repo(repo_name))
 
-        if not repo.has_in_collaborators(username):
-            try:
-                repo.add_to_collaborators(username)
-                print(f"{username} invited to {reponame}")
-            except Exception:
-                warnings.warn(f"failed to invite {username} to {reponame}")
+        team = op.get_team_by_slug(repo_name)
+        try:
+            # raises exception if not a member at any level
+            team.get_team_membership(username)
+        except github.GithubException:
+            print(f"adding {username} to Team {team.name}")
+            team.add_membership(sess.get_user(username), role="member")
 
 
 if __name__ == "__main__":

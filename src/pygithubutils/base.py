@@ -114,7 +114,7 @@ def connect_github(oauth: Path, orgname: str = None) -> T.Tuple[TYPE_AUTH, githu
     return op, sess
 
 
-def repo_exists(user: TYPE_AUTH, reponame: str) -> bool:
+def repo_exists(user: TYPE_AUTH, repo_name: str) -> bool:
     """
     Does a particular GitHub repo exist?
 
@@ -122,8 +122,8 @@ def repo_exists(user: TYPE_AUTH, reponame: str) -> bool:
     ----------
     user : github.AuthenticatedUser.AuthenticatedUser or github.Organization.Organization
         GitHub user or organizaition handle
-    reponame : str
-        reponame under user e.g. pymap3d
+    repo_name : str
+        repo_name under user
 
     Results
     -------
@@ -132,9 +132,36 @@ def repo_exists(user: TYPE_AUTH, reponame: str) -> bool:
     """
     exists = False
     try:
-        repo = user.get_repo(reponame)
+        repo = user.get_repo(repo_name)
         if repo.name:
             exists = True
+    except github.GithubException as e:
+        logging.info(str(e))
+
+    return exists
+
+
+def team_exists(user: TYPE_AUTH, team_name: str) -> bool:
+    """
+    Does a particular GitHub team exist?
+
+    Parameters
+    ----------
+    user : github.AuthenticatedUser.AuthenticatedUser or github.Organization.Organization
+        GitHub user or organizaition handle
+    team_name : str
+        team name
+
+    Results
+    -------
+    exists : bool
+        GitHub team exists
+    """
+    exists = False
+    try:
+        teams = user.get_teams()
+        names = [t.name for t in teams]
+        exists = team_name in names
     except github.GithubException as e:
         logging.info(str(e))
 

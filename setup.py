@@ -1,4 +1,6 @@
-#!/usr/bin/env python
-from setuptools import setup
+#!/usr/bin/env python3
+import setuptools
+import site
 
-setup()
+site.ENABLE_USER_SITE = True
+setuptools.setup()

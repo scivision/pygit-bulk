@@ -59,7 +59,10 @@ def adder(teams: pandas.DataFrame, stem: str, private: bool, create: bool, op, s
         else:
             raise ValueError("I expect team number OR team number and team name")
 
-        username = row[USERNAME]
+        try:
+            user = sess.get_user(row[USERNAME])
+        except github.GithubException:
+            raise ValueError(f"unknown GitHub username {row[USERNAME]}")
 
         if create:
             if not repo_exists(op, repo_name):
@@ -74,10 +77,10 @@ def adder(teams: pandas.DataFrame, stem: str, private: bool, create: bool, op, s
         team = op.get_team_by_slug(repo_name)
         try:
             # raises exception if not a member at any level
-            team.get_team_membership(username)
+            team.get_team_membership(user)
         except github.GithubException:
-            print(f"adding {username} to Team {team.name}")
-            team.add_membership(sess.get_user(username), role="member")
+            print(f"adding {user.name} to Team {team.name}")
+            team.add_membership(user, role="member")
 
 
 if __name__ == "__main__":

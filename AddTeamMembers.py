@@ -10,8 +10,11 @@ oauth token must have "write:org" and public_repo (or repo for private) permissi
 https://developer.github.com/v3/repos/#oauth-scope-requirements
 """
 
+import sys
+import logging
 import pandas
 import github
+import typing as T
 from pygithubutils import team_exists, check_api_limit, connect_github
 from pathlib import Path
 from argparse import ArgumentParser
@@ -47,10 +50,16 @@ def main():
     if not check_api_limit(sess):
         raise RuntimeError("GitHub API limit exceeded")
 
-    adder(teams, p.stem, p.create, op, sess)
+    failed = adder(teams, p.stem, p.create, op, sess)
+    if failed:
+        print("Failed:", file=sys.stderr)
+        print(failed, file=sys.stderr)
 
 
-def adder(teams: pandas.DataFrame, stem: str, create: bool, op, sess):
+def adder(teams: pandas.DataFrame, stem: str, create: bool, op, sess) -> T.List[T.Tuple[str, str, str]]:
+
+    failed: T.List[T.Tuple[str, str, str]] = []
+
     for _, row in teams.iterrows():
         if row.size == 3:
             team_name = f"{stem}{row[TEAMS]:02.0f}-{row[NAME].strip().replace(' ', '-')}"
@@ -70,13 +79,21 @@ def adder(teams: pandas.DataFrame, stem: str, create: bool, op, sess):
                 print("creating Team", team_name)
                 op.create_team(team_name)
 
-        team = op.get_team_by_slug(team_name)
+        try:
+            team = op.get_team_by_slug(team_name)
+        except github.GithubException as e:
+            logging.error(f"Could not add {user.name} {user.login} to {team.name}. Error: {e}")
+            failed.append((user.name, user.login, team.name))
+            continue
+
         try:
             # raises exception if not a member at any level
             team.get_team_membership(user)
         except github.GithubException:
             print(f"adding {user.name} {user.login} to Team {team.name}")
             team.add_membership(user, role="member")
+
+    return failed
 
 
 if __name__ == "__main__":

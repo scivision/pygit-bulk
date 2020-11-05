@@ -18,6 +18,6 @@ jobs:
     - run: pip install -e .[tests,lint]
 
     - run: flake8
-    - run: mypy .
+    - run: mypy
 
     - run: pytest

@@ -293,5 +293,7 @@ def get_repos(userorg: TYPE_USERORG) -> T.Iterable[github.Repository.Repository]
     -------
     repos: list of github.Repository
         all repos for a username / orgname
+
+    https://docs.github.com/en/free-pro-team@latest/rest/reference/repos#list-repositories-for-the-authenticated-user--parameters
     """
     return userorg.get_repos(type="all")

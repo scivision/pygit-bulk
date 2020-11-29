@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+
 """
 Plot number of commits in GitHub repos for a user/organization with repo names matching pattern
 
@@ -12,6 +13,7 @@ example
 
 As a first pass, just shows total LoC changed. Future: plot commit vs. time.
 """
+
 import argparse
 import typing
 from pathlib import Path
@@ -21,13 +23,13 @@ try:
 except ImportError:
     figure = show = None
 
-import pygithubutils as gb
+import gitbulk as gb
 import github.GithubException
 
 
 def main(user: str, oauth: Path, pattern: str, only_empty: bool) -> typing.List[str]:
     # %% authentication
-    sess = gb.github_session(oauth)
+    sess = gb.session(oauth)
     gb.check_api_limit(sess)
     # %% get user / organization handle
     userorg = gb.user_or_org(sess, user)

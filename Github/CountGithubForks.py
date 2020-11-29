@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+
 """
 lists all repos for a Github user.
 Can use Oauth login.
@@ -8,9 +9,10 @@ The Oauth file should be in a secure place, NOT in a Git repo!
 Maybe encrypted and with permissions 600.
 The Oauth key should have no checkboxes, so that it's read only for public repos.
 """
+
 import pandas as pd
 from argparse import ArgumentParser
-import pygithubutils.repo_stats as gu
+import gitbulk.repo_stats as gu
 
 
 def main():

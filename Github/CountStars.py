@@ -1,7 +1,9 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+
 """
 Count how many GitHub Stars a user has received, using GitHub API v4 GraphQL
 """
+
 import requests
 from pathlib import Path
 import argparse

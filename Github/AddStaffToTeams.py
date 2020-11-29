@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 """
 Add staff (set of people) to teams matching pattern
 
@@ -10,7 +11,7 @@ https://developer.github.com/v3/repos/#oauth-scope-requirements
 
 import typing as T
 import github
-import pygithubutils as gb
+import gitbulk as gb
 from argparse import ArgumentParser
 
 
@@ -23,8 +24,7 @@ def main():
     p = p.parse_args()
 
     op, sess = gb.connect_github(p.oauth, p.orgname)
-    if not gb.check_api_limit(sess):
-        raise RuntimeError("GitHub API limit exceeded")
+    gb.check_api_limit(sess)
 
     adder(op, sess, p.stem, p.staff)
 

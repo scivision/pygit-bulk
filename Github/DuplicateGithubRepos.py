@@ -10,8 +10,8 @@ The Oauth key must have "repo" checked, or you'll get 404 error on user.create_r
 Assumes you have an SSH key loaded for git push --mirror step
 """
 from argparse import ArgumentParser
-import pygithubutils.duplicator as gu
-import pygithubutils as gb
+import gitbulk.duplicator as gu
+import gitbulk as gb
 
 
 def main():

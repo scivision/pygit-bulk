@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+
 """
 Unwatch repos for your Github user (that made the Oauthkey),
 where the repos are in an organization with repo names matching pattern
@@ -15,7 +16,7 @@ import argparse
 from pathlib import Path
 
 import github
-import pygithubutils as gb
+import gitbulk as gb
 
 
 def main(oauth: Path, orgname: str, stem: str):

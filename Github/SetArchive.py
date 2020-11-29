@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+
 """
 Archive GitHub repos for a user/organization with repo names matching pattern.
 
@@ -8,8 +9,9 @@ https://developer.github.com/v3/repos/#input
 Requires GitHub Oauth login with
 permissions "repo:public_repo" or "repo" for private repos.
 """
+
 from argparse import ArgumentParser
-import pygithubutils.base as gb
+import gitbulk.base as gb
 
 
 def main():
@@ -20,7 +22,7 @@ def main():
     P = p.parse_args()
 
     # %% authentication
-    sess = gb.github_session(P.oauth)
+    sess = gb.session(P.oauth)
     gb.check_api_limit(sess)
     # %% get user / organization handle
     userorg = gb.user_or_org(sess, P.user)

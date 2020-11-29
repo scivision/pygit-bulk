@@ -1,14 +1,16 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+
 """
 Set all collaborator permission to "read" for a user/organization with repo names matching pattern.
 
 Requires GitHub Oauth login with sufficient permissions "repo:public_repo".
 """
+
 from argparse import ArgumentParser
 import logging
 import webbrowser
 
-import pygithubutils as gb
+import gitbulk as gb
 
 
 def main():
@@ -20,7 +22,7 @@ def main():
     P = p.parse_args()
 
     # %% authentication
-    sess = gb.github_session(P.oauth)
+    sess = gb.session(P.oauth)
     gb.check_api_limit(sess)
     # %% get user / organization handle
     userorg = gb.user_or_org(sess, P.user)
@@ -33,6 +35,8 @@ def main():
     modify = input() == "affirmative"
 
     for repo in to_modify:
+        gb.check_api_limit(sess)
+
         collabs = repo.get_collaborators()
 
         admins = [c.login for c in collabs if c.login not in P.omit]

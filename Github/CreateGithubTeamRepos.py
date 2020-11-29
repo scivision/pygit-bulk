@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+
 """
 mass create repos for teams
 
@@ -9,8 +10,9 @@ example with spreadsheet with usernames in column C, teamname in column D
 oauth token must have "admin:org" and public_repo (or repo for private) permissions
 https://developer.github.com/v3/repos/#oauth-scope-requirements
 """
+
 import pandas
-from pygithubutils import connect_github, repo_exists, check_api_limit
+from gitbulk import connect_github, repo_exists, check_api_limit
 from pathlib import Path
 from argparse import ArgumentParser
 
@@ -33,8 +35,7 @@ def main():
     teams = pandas.read_excel(fn, usecols=",".join(p.col)).squeeze().dropna().drop_duplicates()
     # %%
     op, sess = connect_github(p.oauth, p.orgname)
-    if not check_api_limit(sess):
-        raise RuntimeError("GitHub API limit exceeded")
+    check_api_limit(sess)
 
     if teams.ndim == 1:
         by_num(teams, p.stem, p.private, op, sess)

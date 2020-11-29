@@ -1,15 +1,12 @@
-# PyGitHub Utilities
+# Git Bulk operations
 
-![Actions Status](https://github.com/scivision/pygithub-utils/workflows/ci/badge.svg)
-![CodeQL](https://github.com/scivision/pygithub-utils/workflows/CodeQL/badge.svg)
-[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/scivision/pygithub-utils.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/scivision/pygithub-utils/context:python)
+![Actions Status](https://github.com/scivision/pygit-bulk/workflows/ci/badge.svg)
+![CodeQL](https://github.com/scivision/pygit-bulk/workflows/CodeQL/badge.svg)
+[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/scivision/pygit-bulk.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/scivision/pygit-bulk/context:python)
 
-GitHub API utilities for managing large numbers (10..1000) of users and repositories for education and institutions.
-GitHub v3 API is used via actively developed and growing
-[PyGitHub](https://pypi.org/project/PyGithub/).
+Git remote (GitHub, GitLab) API utilities for managing large numbers (10..1000) of users and repositories for education and institutions.
 For very large number of repos say 1000+, it may be more useful and fast to use the GraphQL GitHub v4 API.
 Input / output is often via spreadsheet, as a gateway to APIs of other services such as Blackboard.
-
 This repository helps us avoid having to use
 [GitHub Education](https://education.github.com/).
 
@@ -20,7 +17,20 @@ For example:
 * duplicate (mirror) lots of repos (DuplicateGithubRepos.p)
 
 We also maintain Python-based Git
-[utilities](https://github.com/scivision/gitutils).
+[utilities](https://github.com/scivision/gitmc)
+useful for managing large numbers of local Git repositories on a computer.
+
+API access via:
+
+* GitHub v3 API: [PyGithub](https://pypi.org/project/PyGithub/)
+* GitLab v4 API: [Python-Gitlab](https://python-gitlab.readthedocs.io/)
+
+Note: Scripts for each remote Git service are located under:
+
+* [GitHub](./Github) We have many more GitHub scripts as GitHub is more popular
+* [GitLab](./Gitlab) will add more here as users desire
+
+## Popularity
 
 An important feature in
 

@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+
 """
 mass copy files by language.
 Useful for templating CI by language e.g. .github/workflows/ci_python.yml etc.
@@ -10,12 +11,13 @@ example with spreadsheet with usernames in column C, teamname in column D
 oauth token must have public_repo (or repo for private) permissions
 https://developer.github.com/v3/repos/#oauth-scope-requirements
 """
+
 from pathlib import Path
 from argparse import ArgumentParser
 import base64
 
 import github
-import pygithubutils as gb
+import gitbulk as gb
 
 
 def main():
@@ -32,7 +34,7 @@ def main():
     copyfn = Path(P.copyfn).expanduser().resolve(True)
     copy_text = copyfn.read_text()
     target = P.targetfn
-    sess = gb.github_session(P.oauth)
+    sess = gb.session(P.oauth)
     gb.check_api_limit(sess)
     # %% get user / organization handle
     userorg = gb.user_or_org(sess, P.userorg)

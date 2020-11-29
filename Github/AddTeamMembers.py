@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 """
 mass add team members to Team, optionally creating new Teams
 
@@ -15,7 +16,7 @@ import logging
 import pandas
 import github
 import typing as T
-from pygithubutils import team_exists, check_api_limit, connect_github
+from gitbulk import team_exists, check_api_limit, connect_github
 from pathlib import Path
 from argparse import ArgumentParser
 
@@ -47,8 +48,7 @@ def main():
         raise ValueError("need to have member names and team names. Check that -col argument matches spreadsheet.")
     # %%
     op, sess = connect_github(p.oauth, p.orgname)
-    if not check_api_limit(sess):
-        raise RuntimeError("GitHub API limit exceeded")
+    check_api_limit(sess)
 
     failed = adder(teams, p.stem, p.create, op, sess)
     if failed:

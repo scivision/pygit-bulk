@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+
 """
 mass add team members to repos, optionally creating new repos
 
@@ -9,9 +10,10 @@ mass add team members to repos, optionally creating new repos
 oauth token must have "write:org" and public_repo (or repo for private) permissions
 https://developer.github.com/v3/repos/#oauth-scope-requirements
 """
+
 import pandas
 import github
-from pygithubutils import repo_exists, team_exists, check_api_limit, connect_github
+from gitbulk import repo_exists, team_exists, check_api_limit, connect_github
 from pathlib import Path
 from argparse import ArgumentParser
 
@@ -44,8 +46,7 @@ def main():
         raise ValueError("need to have member names and team names. Check that -col argument matches spreadsheet.")
     # %%
     op, sess = connect_github(p.oauth, p.orgname)
-    if not check_api_limit(sess):
-        raise RuntimeError("GitHub API limit exceeded")
+    check_api_limit(sess)
 
     adder(teams, p.stem, p.private, p.create, op, sess)
 

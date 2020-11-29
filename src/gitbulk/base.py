@@ -1,6 +1,7 @@
 """
 GitHub API utilities
 """
+
 from pathlib import Path
 from datetime import datetime
 import logging
@@ -13,7 +14,7 @@ TYPE_USERORG = T.Union[github.NamedUser.NamedUser, github.Organization.Organizat
 TYPE_AUTH = T.Union[github.AuthenticatedUser.AuthenticatedUser, github.Organization.Organization]
 
 
-def check_api_limit(g: github.Github = None) -> bool:
+def check_api_limit(g: github.Github = None) -> None:
     """
     https://developer.github.com/v3/#rate-limiting
     don't hammer the API, avoiding 502 errors
@@ -24,16 +25,9 @@ def check_api_limit(g: github.Github = None) -> bool:
     ----------
     g : optional
         GitHub session
-
-    Results
-    -------
-    ok : bool
-        haven't yet exceeded GitHub API limits
     """
     if g is None:
-        g = github_session()
-
-    ok = True
+        g = session()
 
     api_limits = g.rate_limiting  # remaining, limit
     api_remaining, api_max = api_limits
@@ -45,25 +39,23 @@ def check_api_limit(g: github.Github = None) -> bool:
     if api_remaining < 10:
         logging.warning(ResourceWarning(f"approaching GitHub API limit, {api_remaining} / {api_max} remaining until {treset} UTC."))
     else:
-        logging.debug(f"GitHub API limit: {api_remaining} / {api_max} remaining until {treset} UTC.")
-
-    return ok
+        logging.info(f"GitHub API limit: {api_remaining} / {api_max} remaining until {treset} UTC.")
 
 
-def github_session(oauth: Path = None) -> github.Github:
+def session(oauth: Path = None) -> github.Github:
     """
-    setup GitHub session
+    setup Git remote session
 
     Parameters
     ----------
 
     oauth : pathlib.Path, optional
-        file containing GitHub Oauth hash
+        file containing Oauth hash
 
     Results
     -------
     g : github.Github
-        GitHub session handle
+        Git remote session handle
     """
     if oauth:
         oauth = Path(oauth).expanduser()
@@ -74,14 +66,14 @@ def github_session(oauth: Path = None) -> github.Github:
     return g
 
 
-def connect_github(oauth: Path, orgname: str = None) -> T.Tuple[TYPE_AUTH, github.Github]:
+def connect(oauth: Path, orgname: str = None) -> T.Tuple[TYPE_AUTH, github.Github]:
     """
-    retrieve organizations or users from GitHub
+    retrieve organizations or users
 
     Parameters
     ----------
     oauth : pathlib.Path
-        file containing GitHub Oauth hash
+        file containing Oauth hash
     orgname : str
         organization name or username
 
@@ -90,9 +82,9 @@ def connect_github(oauth: Path, orgname: str = None) -> T.Tuple[TYPE_AUTH, githu
     op : github.AuthenticatedUser.AuthenticatedUser or github.Organization.Organization
         handle to organization or user
     sess : github.Github
-        GitHub session
+        Git remote session
     """
-    sess = github_session(oauth)
+    sess = session(oauth)
     guser = sess.get_user()
 
     org = None

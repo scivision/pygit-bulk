@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 """
 Lists collaborators for GitHub repo or repos starting with pattern.
 
@@ -10,24 +11,24 @@ that haven't accepted their invite yet (assuming you sent it previously).
 oauth token must have "read:org" (and "repo" for private repos) permissions
 https://developer.github.com/v3/repos/#oauth-scope-requirements
 """
+
 from argparse import ArgumentParser
 import pandas
 from pathlib import Path
 import itertools
 
-from pygithubutils import check_api_limit, connect_github, get_collabs
+from gitbulk import check_api_limit, connect_github, get_collabs
 
 
 def main(P):
     op, sess = connect_github(P.oauth, P.orgname)
-    if not check_api_limit(sess):
-        raise RuntimeError("GitHub API limit exceeded")
+    check_api_limit(sess)
 
     return get_collabs(op, sess, P.stem, P.regex)
 
 
 if __name__ == "__main__":
-    p = ArgumentParser(description="Lists collaborators for GitHub repo or repos starting with pattern")
+    p = ArgumentParser(description="Lists collaborators for Git repo or repos starting with pattern")
     p.add_argument("oauth", help="Oauth filename")
     p.add_argument("orgname", help="Github organization name")
     p.add_argument("-stem", help="reponame starts with")

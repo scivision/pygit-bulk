@@ -1,11 +1,13 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+
 """
 Totals up stars and fork count for all repos of a Github user.
 Can use Oauth login if desired.
 """
+
 import pandas
 from argparse import ArgumentParser
-import pygithubutils.repo_stats as gu
+import gitbulk.repo_stats as gu
 
 
 def main():

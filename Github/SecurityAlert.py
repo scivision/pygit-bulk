@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+
 """
 Enable / Disable Security Alerts and Vulnerability PRs for
 a user/organization with repo names matching pattern
@@ -6,14 +7,15 @@ a user/organization with repo names matching pattern
 Requires GitHub Oauth login with permissions
 "repo:public_repo" or "repo" for private repos.
 """
+
 import argparse
 
-import pygithubutils as gb
+import gitbulk as gb
 
 
 def main(username: str, oauth: str, stem: str, disable: bool):
     # %% authentication
-    sess = gb.github_session(P.oauth)
+    sess = gb.session(P.oauth)
     gb.check_api_limit(sess)
     # %% get user / organization handle
     userorg = gb.user_or_org(sess, P.user)

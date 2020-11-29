@@ -1,6 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+
 """
-List all GitHub repos of a user / organization.
+List all Git repos of a user / organization.
 Optionally, open the settings or laerts page for each repo.
 
 For organization private repos, you will need "repo" Oauth permission.
@@ -9,15 +10,16 @@ from organization oauth_application_policy settings is OK.
 
 Without Oauth, you will only see public repos
 """
+
 from argparse import ArgumentParser
 import webbrowser
 
-import pygithubutils as gb
+import gitbulk as gb
 
 
 def main():
     p = ArgumentParser(description="List user/organization repos")
-    p.add_argument("user", help="GitHub username / organization name")
+    p.add_argument("user", help="Git remote username / organization name")
     p.add_argument("oauth", help="Oauth filename", nargs="?")
     p.add_argument("-p", "--pattern", help="only repos with name starting with this string")
     p.add_argument("-settings", help="open settings page for each repo", action="store_true")
@@ -25,7 +27,7 @@ def main():
     P = p.parse_args()
 
     # %% authentication
-    sess = gb.github_session(P.oauth)
+    sess = gb.session(P.oauth)
     gb.check_api_limit(sess)
     # %% get user / organization handle
     userorg = gb.user_or_org(sess, P.user)

@@ -1,13 +1,14 @@
 """
 How many total GitHub stars do you have?
 """
+
 from typing import Tuple, List
 from time import sleep
 from pathlib import Path
 import github
 import logging
 
-from .base import check_api_limit, github_session, get_repos, user_or_org
+from .base import check_api_limit, session, get_repos, user_or_org
 
 
 def repo_prober(
@@ -38,7 +39,7 @@ def repo_prober(
         forked with repos with number of commits they're ahead of your repo
     """
     # %% authentication
-    sess = github_session(oauth)
+    sess = session(oauth)
     check_api_limit(sess)
     userorg = user_or_org(sess, user)
     # %% prepare to loop over repos

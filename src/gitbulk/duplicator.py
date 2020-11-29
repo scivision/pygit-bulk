@@ -10,7 +10,7 @@ import typing as T
 
 import github
 
-from .base import github_session, check_api_limit, last_commit_date, repo_exists
+from .base import session, check_api_limit, last_commit_date, repo_exists
 
 git = shutil.which("git")
 if not git:
@@ -33,7 +33,7 @@ def repo_dupe(repos: T.Dict[str, str], oauth: Path, orgname: str = None, stem: s
         what to start new repo name with
     """
     # %% authenticate
-    sess = github_session(oauth)
+    sess = session(oauth)
     guser = sess.get_user()
 
     org = None
@@ -53,12 +53,9 @@ def repo_dupe(repos: T.Dict[str, str], oauth: Path, orgname: str = None, stem: s
 
     username = op.login
 
-    if not check_api_limit(sess):
-        raise RuntimeError("GitHub API limit exceeded")
     # %% prepare to loop over repos
     for email, oldurl in repos.items():
-        if not check_api_limit(sess):
-            raise RuntimeError("GitHub API limit exceeded")
+        check_api_limit(sess)
 
         oldurl = oldurl.replace("https", "ssh")
         oldname = "/".join(oldurl.split("/")[-2:]).split(".")[0]

@@ -21,8 +21,10 @@ import gitbulk as gb
 
 def main(oauth: Path, orgname: str, stem: str):
     # %% authentication
-    user, sess = gb.connect_github(oauth)
-    assert isinstance(user, github.AuthenticatedUser.AuthenticatedUser), "unwatch is for users only, not orgs"
+    user, sess = gb.connect(oauth)
+    assert isinstance(
+        user, github.AuthenticatedUser.AuthenticatedUser
+    ), "unwatch is for users only, not orgs"
     gb.check_api_limit(sess)
     # %% get organization handle
     org = gb.user_or_org(sess, orgname)

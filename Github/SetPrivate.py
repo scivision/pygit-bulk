@@ -16,7 +16,9 @@ import gitbulk as gb
 
 
 def main():
-    p = ArgumentParser(description="Set Private GitHub repos for a user/organization with repo names matching pattern")
+    p = ArgumentParser(
+        description="Set Private GitHub repos for a user/organization with repo names matching pattern"
+    )
     p.add_argument("userorgname", help="GitHub username / organizations")
     p.add_argument("oauth", help="Oauth filename")
     p.add_argument("pattern", help="make private repos with name starting with this string")
@@ -32,7 +34,9 @@ def main():
 
     to_act = [repo for repo in repos if repo.name.startswith(P.pattern) and not repo.private]
     if not to_act:
-        raise SystemExit(f"There were no repos left to make private with {P.pattern} in {P.userorgname}")
+        raise SystemExit(
+            f"There were no repos left to make private with {P.pattern} in {P.userorgname}"
+        )
 
     print("\ntype affirmative to make PRIVATE", "\n".join([repo.full_name for repo in to_act]))
     if input() != "affirmative":

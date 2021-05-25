@@ -2,6 +2,7 @@
 GitHub API utilities
 """
 
+from __future__ import annotations
 from pathlib import Path
 from datetime import datetime
 import logging
@@ -9,9 +10,6 @@ import typing as T
 import pandas
 
 import github
-
-TYPE_USERORG = T.Union[github.NamedUser.NamedUser, github.Organization.Organization]
-TYPE_AUTH = T.Union[github.AuthenticatedUser.AuthenticatedUser, github.Organization.Organization]
 
 
 def check_api_limit(g: github.Github = None) -> None:
@@ -34,10 +32,16 @@ def check_api_limit(g: github.Github = None) -> None:
     treset = datetime.utcfromtimestamp(g.rate_limiting_resettime)  # local time
 
     if api_remaining == 0:
-        raise ConnectionRefusedError(f"GitHub rate limit exceeded: {api_remaining} / {api_max}. Try again after {treset} UTC.")
+        raise ConnectionRefusedError(
+            f"GitHub rate limit exceeded: {api_remaining} / {api_max}. Try again after {treset} UTC."
+        )
     # it's not elif !
     if api_remaining < 10:
-        logging.warning(ResourceWarning(f"approaching GitHub API limit, {api_remaining} / {api_max} remaining until {treset} UTC."))
+        logging.warning(
+            ResourceWarning(
+                f"approaching GitHub API limit, {api_remaining} / {api_max} remaining until {treset} UTC."
+            )
+        )
     else:
         logging.info(f"GitHub API limit: {api_remaining} / {api_max} remaining until {treset} UTC.")
 
@@ -66,7 +70,11 @@ def session(oauth: Path = None) -> github.Github:
     return g
 
 
-def connect(oauth: Path, orgname: str = None) -> T.Tuple[TYPE_AUTH, github.Github]:
+def connect(
+    oauth: Path, orgname: str = None
+) -> tuple[
+    github.AuthenticatedUser.AuthenticatedUser | github.Organization.Organization, github.Github
+]:
     """
     retrieve organizations or users
 
@@ -106,7 +114,7 @@ def connect(oauth: Path, orgname: str = None) -> T.Tuple[TYPE_AUTH, github.Githu
     return op, sess
 
 
-def repo_exists(user: TYPE_AUTH, repo_name: str) -> bool:
+def repo_exists(user: github.AuthenticatedUser.AuthenticatedUser, repo_name: str) -> bool:
     """
     Does a particular GitHub repo exist?
 
@@ -133,7 +141,7 @@ def repo_exists(user: TYPE_AUTH, repo_name: str) -> bool:
     return exists
 
 
-def team_exists(user: TYPE_AUTH, team_name: str) -> bool:
+def team_exists(user: github.AuthenticatedUser.AuthenticatedUser, team_name: str) -> bool:
     """
     Does a particular GitHub team exist?
 
@@ -247,7 +255,7 @@ def user_or_org(g: github.Github, user: str) -> T.Any:
         return g.get_user(user)
 
 
-def read_repos(fn: Path, sheet: str) -> T.Dict[str, str]:
+def read_repos(fn: Path, sheet: str) -> dict[str, str]:
     """
     make pandas.Series of email/id, Git url from spreadsheet
 
@@ -272,7 +280,7 @@ def read_repos(fn: Path, sheet: str) -> T.Dict[str, str]:
     return repos.to_dict()
 
 
-def get_repos(userorg: TYPE_USERORG) -> T.Iterable[github.Repository.Repository]:
+def get_repos(userorg: github.NamedUser.NamedUser) -> T.Iterable[github.Repository.Repository]:
     """
     get list of Repositories for a user or organization
 

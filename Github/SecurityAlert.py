@@ -39,7 +39,9 @@ if __name__ == "__main__":
     p = argparse.ArgumentParser(description="Enable/Disable GitHub security alerts")
     p.add_argument("user", help="GitHub username / organizations")
     p.add_argument("oauth", help="Oauth filename")
-    p.add_argument("-disable", help="instead of enabling alerts, disable alerts", action="store_true")
+    p.add_argument(
+        "-disable", help="instead of enabling alerts, disable alerts", action="store_true"
+    )
     p.add_argument("-stem", help="act on repos with name starting with this string", default="")
     P = p.parse_args()
 

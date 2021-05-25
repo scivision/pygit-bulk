@@ -21,7 +21,9 @@ def main():
     for u in p.user:
         counts = gu.repo_prober(u, p.oauth, None, True)[0]
 
-        d = pandas.DataFrame([c[1:] for c in counts], index=[c[0] for c in counts], columns=["forks", "stars"])
+        d = pandas.DataFrame(
+            [c[1:] for c in counts], index=[c[0] for c in counts], columns=["forks", "stars"]
+        )
         dat = pandas.concat((dat, d))
 
     datnz = dat[~(dat == 0).all(axis=1)].drop_duplicates()

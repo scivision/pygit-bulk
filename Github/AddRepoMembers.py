@@ -13,7 +13,7 @@ https://developer.github.com/v3/repos/#oauth-scope-requirements
 
 import pandas
 import github
-from gitbulk import repo_exists, team_exists, check_api_limit, connect_github
+from gitbulk import repo_exists, team_exists, check_api_limit, connect
 from pathlib import Path
 from argparse import ArgumentParser
 
@@ -43,9 +43,11 @@ def main():
         raise ValueError(f"Unknown file type {fn}")
 
     if not teams.ndim == 2:
-        raise ValueError("need to have member names and team names. Check that -col argument matches spreadsheet.")
+        raise ValueError(
+            "need to have member names and team names. Check that -col argument matches spreadsheet."
+        )
     # %%
-    op, sess = connect_github(p.oauth, p.orgname)
+    op, sess = connect(p.oauth, p.orgname)
     check_api_limit(sess)
 
     adder(teams, p.stem, p.private, p.create, op, sess)

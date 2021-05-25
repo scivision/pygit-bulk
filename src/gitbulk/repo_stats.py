@@ -2,7 +2,7 @@
 How many total GitHub stars do you have?
 """
 
-from typing import Tuple, List
+from __future__ import annotations
 from time import sleep
 from pathlib import Path
 import github
@@ -12,8 +12,12 @@ from .base import check_api_limit, session, get_repos, user_or_org
 
 
 def repo_prober(
-    user: str, oauth: Path = None, branch: str = None, starsonly: bool = False, verbose: bool = False
-) -> Tuple[List[Tuple[str, int, int]], List[Tuple[str, int]]]:
+    user: str,
+    oauth: Path = None,
+    branch: str = None,
+    starsonly: bool = False,
+    verbose: bool = False,
+) -> tuple[list[tuple[str, int, int]], list[tuple[str, int]]]:
     """
     probe all GitHub repos for a user to see how much forks of each repo are ahead.
     Discover if there is an actively developed fork of your GitHub repos
@@ -45,8 +49,8 @@ def repo_prober(
     # %% prepare to loop over repos
     repos = get_repos(userorg)
 
-    counts: List[Tuple[str, int, int]] = []
-    ahead: List[Tuple[str, int]] = []
+    counts: list[tuple[str, int, int]] = []
+    ahead: list[tuple[str, int]] = []
 
     for repo in repos:
         if not starsonly:
@@ -61,8 +65,12 @@ def repo_prober(
 
 
 def fork_prober(
-    repo: github.Repository.Repository, sess: github.Github, ahead: List[Tuple[str, int]], branch: str = None, verbose: bool = False
-) -> List[Tuple[str, int]]:
+    repo: github.Repository.Repository,
+    sess: github.Github,
+    ahead: list[tuple[str, int]],
+    branch: str = None,
+    verbose: bool = False,
+) -> list[tuple[str, int]]:
     """
     check a GitHub repo for forks
 
@@ -103,7 +111,9 @@ def fork_prober(
         try:
             fmaster = fork.get_branch(b)
         except github.GithubException as e:
-            if e.data["message"] == "Not Found":  # repo/branch that they deleted  FIXME: should we check their default branch?
+            if (
+                e.data["message"] == "Not Found"
+            ):  # repo/branch that they deleted  FIXME: should we check their default branch?
                 continue
 
             logging.error(f"{repo.full_name} {fork.full_name}  {e}")

@@ -12,7 +12,7 @@ https://developer.github.com/v3/repos/#oauth-scope-requirements
 """
 
 import pandas
-from gitbulk import connect_github, repo_exists, check_api_limit
+from gitbulk import connect, repo_exists, check_api_limit
 from pathlib import Path
 from argparse import ArgumentParser
 
@@ -26,7 +26,9 @@ def main():
     p.add_argument("oauth", help="Oauth file")
     p.add_argument("orgname", help="Github Organization")
     p.add_argument("-stem", help="beginning of repo names", default="")
-    p.add_argument("-col", help="column(s) for TeamName OR TeamNumber, TeamName", nargs="+", required=True)
+    p.add_argument(
+        "-col", help="column(s) for TeamName OR TeamNumber, TeamName", nargs="+", required=True
+    )
     p.add_argument("-private", help="create private repos", action="store_true")
     p = p.parse_args()
 
@@ -34,7 +36,7 @@ def main():
 
     teams = pandas.read_excel(fn, usecols=",".join(p.col)).squeeze().dropna().drop_duplicates()
     # %%
-    op, sess = connect_github(p.oauth, p.orgname)
+    op, sess = connect(p.oauth, p.orgname)
     check_api_limit(sess)
 
     if teams.ndim == 1:

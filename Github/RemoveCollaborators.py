@@ -31,7 +31,10 @@ def main():
 
     to_modify = [repo for repo in repos if repo.name.startswith(P.pattern)]
 
-    print("\ntype affirmative to remove all collaborators from\n", "\n".join([repo.full_name for repo in to_modify]))
+    print(
+        "\ntype affirmative to remove all collaborators from\n",
+        "\n".join([repo.full_name for repo in to_modify]),
+    )
     modify = input() == "affirmative"
 
     for repo in to_modify:

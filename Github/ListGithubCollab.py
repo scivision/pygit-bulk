@@ -17,23 +17,29 @@ import pandas
 from pathlib import Path
 import itertools
 
-from gitbulk import check_api_limit, connect_github, get_collabs
+from gitbulk import check_api_limit, connect, get_collabs
 
 
 def main(P):
-    op, sess = connect_github(P.oauth, P.orgname)
+    op, sess = connect(P.oauth, P.orgname)
     check_api_limit(sess)
 
     return get_collabs(op, sess, P.stem, P.regex)
 
 
 if __name__ == "__main__":
-    p = ArgumentParser(description="Lists collaborators for Git repo or repos starting with pattern")
+    p = ArgumentParser(
+        description="Lists collaborators for Git repo or repos starting with pattern"
+    )
     p.add_argument("oauth", help="Oauth filename")
     p.add_argument("orgname", help="Github organization name")
     p.add_argument("-stem", help="reponame starts with")
     p.add_argument("-regex", help="regex pattern of reponame")
-    p.add_argument("-xls", help="spreadsheet filename and column to find missing usernames (who isn't signed up)", nargs=2)
+    p.add_argument(
+        "-xls",
+        help="spreadsheet filename and column to find missing usernames (who isn't signed up)",
+        nargs=2,
+    )
     P = p.parse_args()
 
     collabs = main(P)

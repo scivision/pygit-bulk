@@ -1,4 +1,4 @@
-import typing
+from __future__ import annotations
 import re
 
 import github
@@ -6,7 +6,7 @@ import github
 
 def get_collabs(
     op: github.Organization.Organization, sess: github.Github, stem: str = None, regex: str = None
-) -> typing.Dict[str, typing.List[str]]:
+) -> dict[str, list[str]]:
     """
     get collaborators of a GitHub repo
 
@@ -35,6 +35,8 @@ def get_collabs(
         elif stem and not repo.name.startswith(stem):
             continue
 
-        collabs[repo.name] = [u.login for u in repo.get_collaborators() if u.login not in orgmembers]
+        collabs[repo.name] = [
+            u.login for u in repo.get_collaborators() if u.login not in orgmembers
+        ]
 
     return collabs

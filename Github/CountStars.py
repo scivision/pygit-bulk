@@ -12,7 +12,9 @@ ENDPOINT = "https://api.github.com/graphql"
 
 
 def run_query(query: str, token_file: Path):
-    request = requests.post(ENDPOINT, json={"query": query}, headers={"Authorization": token_file.read_text()})
+    request = requests.post(
+        ENDPOINT, json={"query": query}, headers={"Authorization": token_file.read_text()}
+    )
     if request.status_code == 200:
         return request.json()
     else:

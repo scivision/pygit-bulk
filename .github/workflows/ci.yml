@@ -3,7 +3,7 @@ name: ci
 on:
   push:
     paths:
-      - .GitHub/workflows/ci.yml
+      - .github/workflows/ci.yml
       - "**/*.py"
 
 jobs:

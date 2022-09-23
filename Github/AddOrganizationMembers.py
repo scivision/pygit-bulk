@@ -21,7 +21,7 @@ def main():
     p.add_argument("fn", help=".xlsx with group info")
     p.add_argument("oauth", help="Oauth file")
     p.add_argument("-orgname", help="Github Organization", required=True)
-    p.add_argument("-col", help="column for GitHub Username", nargs="+", required=True)
+    p.add_argument("-col", help="column for GitHub Username", required=True)
     p = p.parse_args()
 
     fn = Path(p.fn).expanduser()

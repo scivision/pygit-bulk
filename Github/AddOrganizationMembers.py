@@ -29,7 +29,7 @@ def main():
     if fn.suffix in (".xls", ".xlsx"):
         users = pandas.read_excel(fn, usecols=p.col).squeeze().dropna()
     elif fn.suffix == ".csv":
-        users = pandas.read_csv(fn, usecols=p.col).squeeze().dropna()
+        users = pandas.read_csv(fn, usecols=[int(p.col)]).squeeze().dropna()
     else:
         raise ValueError(f"Unknown file type {fn}")
 

@@ -1,7 +1,6 @@
 # Git Bulk operations
 
 ![Actions Status](https://github.com/scivision/pygit-bulk/workflows/ci/badge.svg)
-![CodeQL](https://github.com/scivision/pygit-bulk/workflows/CodeQL/badge.svg)
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/scivision/pygit-bulk.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/scivision/pygit-bulk/context:python)
 
 Git remote (GitHub, GitLab) API utilities for managing large numbers (10..1000) of users and repositories for education and institutions.

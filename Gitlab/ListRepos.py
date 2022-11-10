@@ -2,7 +2,6 @@
 
 """
 List all Git repos of a user / organization.
-Optionally, open the settings or laerts page for each repo.
 
 For organization private repos, you will need "repo" Oauth permission.
 Restricted "Third-party application access policy"

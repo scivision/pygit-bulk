@@ -11,6 +11,7 @@ oauth token must have "write:org" and public_repo (or repo for private) permissi
 https://developer.github.com/v3/repos/#oauth-scope-requirements
 """
 
+from __future__ import annotations
 import sys
 import logging
 import pandas

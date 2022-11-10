@@ -14,8 +14,8 @@ example
 As a first pass, just shows total LoC changed. Future: plot commit vs. time.
 """
 
+from __future__ import annotations
 import argparse
-import typing
 from pathlib import Path
 
 try:
@@ -27,7 +27,7 @@ import gitbulk as gb
 import github.GithubException
 
 
-def main(user: str, oauth: Path, pattern: str, only_empty: bool) -> typing.List[str]:
+def main(user: str, oauth: Path, pattern: str, only_empty: bool) -> list[str]:
     # %% authentication
     sess = gb.session(oauth)
     gb.check_api_limit(sess)
@@ -38,10 +38,10 @@ def main(user: str, oauth: Path, pattern: str, only_empty: bool) -> typing.List[
 
     to_act = (repo for repo in repos if repo.name.startswith(pattern))
 
-    empty: typing.List[str] = []
+    empty: list[str] = []
     for repo in to_act:
         print(f"examining {repo.name}", end="\r")
-        authors: typing.Dict[str, int] = {}
+        authors: dict[str, int] = {}
         try:
             for commit in repo.get_commits():
                 if only_empty:

@@ -3,10 +3,13 @@
 """
 mass add users to organization
 
-    python AddOrganizationMembers.py my.xlsx ~/.ssh/orgOauth -orgname myorg -col Username
+    python AddOrganizationMembers.py my.xlsx ~/.ssh/orgOauth -orgname myorg -col 4
 
 oauth token must have "write:org" and public_repo (or repo for private) permissions
 https://developer.github.com/v3/repos/#oauth-scope-requirements
+
+Note: the "fine-grained" Oauth didn't work for organizations in Nov 2022.
+The "classic" Oauth does work for organizations.
 """
 
 import pandas
@@ -21,7 +24,7 @@ def main():
     p.add_argument("fn", help=".xlsx with group info")
     p.add_argument("oauth", help="Oauth file")
     p.add_argument("-orgname", help="Github Organization", required=True)
-    p.add_argument("-col", help="column for GitHub Username", required=True)
+    p.add_argument("-col", help="column for GitHub Username", type=int, required=True)
     p = p.parse_args()
 
     fn = Path(p.fn).expanduser()
@@ -29,7 +32,7 @@ def main():
     if fn.suffix in (".xls", ".xlsx"):
         users = pandas.read_excel(fn, usecols=p.col).squeeze().dropna()
     elif fn.suffix == ".csv":
-        users = pandas.read_csv(fn, usecols=[int(p.col)]).squeeze().dropna()
+        users = pandas.read_csv(fn, usecols=[p.col]).squeeze().dropna()
     else:
         raise ValueError(f"Unknown file type {fn}")
 

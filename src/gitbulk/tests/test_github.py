@@ -26,4 +26,4 @@ def test_get_repos():
     except (ConnectionRefusedError, gexc.RateLimitExceededException):
         pytest.skip("GitHub API limit exceeded")
 
-    assert len(list(repos)) > 0
+    assert repos[0]

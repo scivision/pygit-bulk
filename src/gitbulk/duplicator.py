@@ -9,9 +9,7 @@ import webbrowser
 import shutil
 import typing as T
 
-import github
-
-from .base import session, check_api_limit, last_commit_date, repo_exists
+from .base import connect, check_api_limit, last_commit_date, repo_exists
 
 git = shutil.which("git")
 if not git:
@@ -34,23 +32,7 @@ def repo_dupe(repos: dict[str, str], oauth: Path, orgname: str = None, stem: str
         what to start new repo name with
     """
     # %% authenticate
-    sess = session(oauth)
-    guser = sess.get_user()
-
-    org = None
-    if orgname:
-        assert isinstance(guser, github.AuthenticatedUser.AuthenticatedUser)
-        orgs = list(guser.get_orgs())
-        for o in orgs:
-            if o.login == orgname:
-                org = o
-                break
-
-        assert org is not None
-        op = org
-    else:
-        assert isinstance(guser, github.Organization.Organization)
-        op = guser
+    op, sess = connect(oauth, orgname)
 
     username = op.login
 

@@ -1,5 +1,8 @@
 """
 GitHub API utilities
+
+Note: the "fine-grained" Oauth didn't work for organizations in Nov 2022.
+The "classic" Oauth does work for organizations.
 """
 
 from __future__ import annotations
@@ -54,20 +57,17 @@ def session(oauth: Path = None) -> github.Github:
     ----------
 
     oauth : pathlib.Path, optional
-        file containing Oauth hash
+        path to file containing Oauth hash
 
     Results
     -------
     g : github.Github
         Git remote session handle
     """
-    if oauth:
-        oauth = Path(oauth).expanduser()
-        g = github.Github(oauth.read_text().strip())  # no trailing \n allowed
-    else:  # unauthenticated
-        g = github.Github()
+    inp = Path(oauth).expanduser().read_text().strip() if oauth else None
+    # no trailing \n allowed
 
-    return g
+    return github.Github(inp)
 
 
 def connect(
@@ -92,26 +92,21 @@ def connect(
     sess : github.Github
         Git remote session
     """
+
     sess = session(oauth)
     guser = sess.get_user()
 
-    org = None
     if orgname:
         assert isinstance(guser, github.AuthenticatedUser.AuthenticatedUser)
-        orgs = list(guser.get_orgs())
-        for o in orgs:
-            if o.login == orgname:
-                org = o
-                break
 
-        if org is None:
-            raise ValueError(f"Organization {org} authentication could not be established")
-        op = org
+        for org in guser.get_orgs():
+            if org.login == orgname:
+                return org, sess
     else:
         assert isinstance(guser, github.Organization.Organization)
-        op = guser
+        return guser, sess
 
-    return op, sess
+    raise ValueError(f"Organization {org} authentication could not be established")
 
 
 def repo_exists(user: github.AuthenticatedUser.AuthenticatedUser, repo_name: str) -> bool:
@@ -245,7 +240,7 @@ def user_or_org(g: github.Github, user: str) -> T.Any:
         the handle to the Organization or Username.
     """
     try:
-        list(g.search_users(f"user:{user}"))
+        g.search_users(f"user:{user}")[0]
     except github.GithubException as e:
         raise ValueError(f"{user} not found on GitHub\n{e}")
 

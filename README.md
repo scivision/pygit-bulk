@@ -1,7 +1,6 @@
 # Git Bulk operations
 
 ![Actions Status](https://github.com/scivision/pygit-bulk/workflows/ci/badge.svg)
-[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/scivision/pygit-bulk.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/scivision/pygit-bulk/context:python)
 
 Git remote (GitHub, GitLab) API utilities for managing large numbers (10..1000) of users and repositories for education and institutions.
 For very large number of repos say 1000+, it may be more useful and fast to use the GraphQL GitHub v4 API.

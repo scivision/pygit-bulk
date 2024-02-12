@@ -25,7 +25,7 @@ if __name__ == "__main__":
     p = argparse.ArgumentParser(description="Totals up stars with GitHub v4 API")
     p.add_argument("oauth", help="path to oauth key")
     p.add_argument("username", help="GitHub username(s) to count stars for", nargs="+")
-    p = p.parse_args()
+    P = p.parse_args()
 
     query = """
 query {
@@ -46,9 +46,9 @@ query {
   }
 }
     """ % (
-        p.username
+        P.username
     )
 
-    token_file = Path(p.oauth).expanduser()
+    token_file = Path(P.oauth).expanduser()
 
     dat = run_query(query, token_file)

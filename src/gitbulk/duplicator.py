@@ -7,16 +7,23 @@ import tempfile
 from datetime import datetime
 import webbrowser
 import shutil
-import typing as T
+import functools
 
 from .base import connect, check_api_limit, last_commit_date, repo_exists
 
-git = shutil.which("git")
-if not git:
-    raise ImportError("Git not found")
+
+@functools.cache
+def git_exe() -> str:
+    """
+    Find git executable
+    """
+
+    if not (git := shutil.which("git")):
+        raise ImportError("Git not found")
+    return git
 
 
-def repo_dupe(repos: dict[str, str], oauth: Path, orgname: str = None, stem: str = ""):
+def repo_dupe(repos: dict[str, str], oauth: Path, orgname: str | None = None, stem: str = ""):
     """
     Duplicate GitHub repos AND their wikis
 
@@ -57,19 +64,18 @@ def repo_dupe(repos: dict[str, str], oauth: Path, orgname: str = None, stem: str
 
 def gitdupe(
     oldurl: str,
-    oldtime: T.Optional[datetime],
+    oldtime: datetime | None,
     username: str,
     mirrorname: str,
     op,
     iswiki: bool = False,
 ):
-
     if iswiki:
         oldurl += ".wiki.git"
         mirrorname += ".wiki.git"
         try:
             subprocess.check_call(
-                [git, "ls-remote", "--exit-code", oldurl], stdout=subprocess.DEVNULL
+                [git_exe(), "ls-remote", "--exit-code", oldurl], stdout=subprocess.DEVNULL
             )
         except subprocess.CalledProcessError:
             logging.error(f"{oldurl} has no Wiki")
@@ -88,7 +94,7 @@ def gitdupe(
     else:
         try:
             subprocess.check_call(
-                [git, "ls-remote", "--exit-code", newurl],
+                [git_exe(), "ls-remote", "--exit-code", newurl],
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,
             )
@@ -101,7 +107,7 @@ def gitdupe(
     with tempfile.TemporaryDirectory() as d:
         tmprepo = Path(d)
         # 1. bare clone
-        cmd = [git, "clone", oldurl] if iswiki else ["git", "clone", "--bare", oldurl]
+        cmd = [git_exe(), "clone", oldurl] if iswiki else ["git", "clone", "--bare", oldurl]
         subprocess.check_call(cmd, stdout=subprocess.DEVNULL, cwd=tmprepo)
 
         # 2. create new repo
@@ -116,7 +122,7 @@ def gitdupe(
             pwd = tmprepo / (oldurl.split("/")[-1])
             pwd = pwd.with_suffix(".git")
 
-            cmd = [git, "push", "--mirror", newurl]
+            cmd = [git_exe(), "push", "--mirror", newurl]
             subprocess.check_call(cmd, cwd=pwd)
 
 
@@ -127,7 +133,7 @@ def dupewiki(prepo: Path, oldurl: str, newurl: str):
     pwd = prepo / (oldurl.split("/")[-1]).split(".git")[0]
 
     subprocess.check_call(
-        [git, "remote", "set-url", "origin", newurl], cwd=pwd, stdout=subprocess.DEVNULL
+        [git_exe(), "remote", "set-url", "origin", newurl], cwd=pwd, stdout=subprocess.DEVNULL
     )
 
     browseurl = newurl
@@ -135,4 +141,4 @@ def dupewiki(prepo: Path, oldurl: str, newurl: str):
     webbrowser.open_new_tab(browseurl)
     sleep(10.0)  # TODO: use suprocess.run() instead of webbrowser
 
-    subprocess.check_call([git, "push", "-f"], cwd=pwd)
+    subprocess.check_call([git_exe(), "push", "-f"], cwd=pwd)

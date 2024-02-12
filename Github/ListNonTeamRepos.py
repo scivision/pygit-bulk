@@ -10,9 +10,10 @@ https://developer.github.com/v3/repos/#oauth-scope-requirements
 """
 
 import typing as T
+from argparse import ArgumentParser
+
 import github
 import gitbulk as gb
-from argparse import ArgumentParser
 
 
 def main():
@@ -29,7 +30,7 @@ def main():
     lister(op, sess, p.stem, p.put_team)
 
 
-def lister(op, sess, stem: str = None, put_team: str = None):
+def lister(op, sess, stem: str | None = None, put_team: str | None = None):
     """
     list matching repos
     optionally, add to specified EXISTING team

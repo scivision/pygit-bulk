@@ -1,5 +1,36 @@
 [build-system]
-requires = ["setuptools", "wheel"]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gitbulk"
+description = "Manage user teams for classroom and insitutions with Git remote API calls."
+keywords = ["git", "GitHub", "GitLab"]
+classifiers = ["Development Status :: 5 - Production/Stable",
+ "Environment :: Console",
+ "Intended Audience :: Developers",
+ "Operating System :: OS Independent",
+ "Programming Language :: Python :: 3",
+ "Topic :: Software Development :: Version Control :: Git",
+ "Topic :: Utilities"
+]
+requires-python = ">=3.9"
+dynamic = ["readme","version"]
+dependencies = ["pygithub >= 1.53", "pandas"]
+
+
+[tool.setuptools.dynamic]
+readme = {file = ["README.md"], content-type = "text/markdown"}
+version = {attr = "gitbulk.__version__"}
+
+[project.optional-dependencies]
+tests = ["pytest"]
+lint = ["flake8", "flake8-bugbear", "flake8-builtins", "flake8-blind-except",
+"mypy", "types-requests"]
 
 [tool.black]
 line-length = 100
+
+[tool.mypy]
+files = ["src/", "Github/"]
+ignore_missing_imports = true

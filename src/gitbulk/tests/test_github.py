@@ -6,12 +6,10 @@ import pytest
 import random
 import string
 
-import github.GithubException as gexc
-
 import gitbulk as pgu
 
 random_username = "".join(random.choice(string.ascii_lowercase) for i in range(32))
-OK_username = "scivision"
+OK_username = "microsoft"
 
 
 def test_bad_username():
@@ -23,7 +21,7 @@ def test_get_repos():
     try:
         userorg = pgu.user_or_org(pgu.session(), OK_username)
         repos = pgu.get_repos(userorg)
-    except (ConnectionRefusedError, gexc.RateLimitExceededException):
+    except ConnectionRefusedError:
         pytest.skip("GitHub API limit exceeded")
 
     assert repos[0]

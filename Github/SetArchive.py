@@ -11,6 +11,7 @@ permissions "repo:public_repo" or "repo" for private repos.
 """
 
 from argparse import ArgumentParser
+
 import gitbulk.base as gb
 
 

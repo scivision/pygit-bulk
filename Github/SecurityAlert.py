@@ -15,10 +15,10 @@ import gitbulk as gb
 
 def main(username: str, oauth: str, stem: str, disable: bool):
     # %% authentication
-    sess = gb.session(P.oauth)
+    sess = gb.session(oauth)
     gb.check_api_limit(sess)
     # %% get user / organization handle
-    userorg = gb.user_or_org(sess, P.user)
+    userorg = gb.user_or_org(sess, username)
     # %% prepare to loop over repos
     repos = gb.get_repos(userorg)
 

@@ -29,7 +29,7 @@ def main():
 
     fn = Path(p.fn).expanduser()
 
-    if fn.suffix in (".xls", ".xlsx"):
+    if fn.suffix in {".xls", ".xlsx"}:
         users = pandas.read_excel(fn, usecols=p.col).squeeze().dropna()
     elif fn.suffix == ".csv":
         users = pandas.read_csv(fn, usecols=[p.col]).squeeze().dropna()

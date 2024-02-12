@@ -60,7 +60,6 @@ def main():
 
 
 def adder(teams: pandas.DataFrame, stem: str, create: bool, op, sess) -> list[tuple[str, str, str]]:
-
     failed: list[tuple[str, str, str]] = []
 
     for _, row in teams.iterrows():

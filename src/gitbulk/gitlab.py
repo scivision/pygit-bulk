@@ -2,7 +2,7 @@ import gitlab
 from pathlib import Path
 
 
-def session(oauth: Path = None, url: str = "https://gitlab.com") -> gitlab.Gitlab:
+def session(oauth: Path | None = None, url: str = "https://gitlab.com") -> gitlab.Gitlab:
     """
     setup Git remote session
 

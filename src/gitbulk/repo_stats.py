@@ -13,8 +13,8 @@ from .base import check_api_limit, session, get_repos, user_or_org
 
 def repo_prober(
     user: str,
-    oauth: Path = None,
-    branch: str = None,
+    oauth: Path | None = None,
+    branch: str | None = None,
     starsonly: bool = False,
     verbose: bool = False,
 ) -> tuple[list[tuple[str, int, int]], list[tuple[str, int]]]:
@@ -68,7 +68,7 @@ def fork_prober(
     repo: github.Repository.Repository,
     sess: github.Github,
     ahead: list[tuple[str, int]],
-    branch: str = None,
+    branch: str | None = None,
     verbose: bool = False,
 ) -> list[tuple[str, int]]:
     """

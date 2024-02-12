@@ -5,7 +5,10 @@ import github
 
 
 def get_collabs(
-    op: github.Organization.Organization, sess: github.Github, stem: str = None, regex: str = None
+    op: github.Organization.Organization,
+    sess: github.Github,
+    stem: str | None = None,
+    regex: str | None = None,
 ) -> dict[str, list[str]]:
     """
     get collaborators of a GitHub repo

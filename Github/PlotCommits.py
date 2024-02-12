@@ -18,10 +18,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-try:
-    from matplotlib.pyplot import figure, show
-except ImportError:
-    figure = show = None
+from matplotlib.pyplot import figure, show
 
 import gitbulk as gb
 import github.GithubException
@@ -58,8 +55,8 @@ def main(user: str, oauth: Path, pattern: str, only_empty: bool) -> list[str]:
                     authors[commit.author.login] = commit.stats.total
             if not only_empty:
                 ax = figure().gca()
-                ax.scatter(authors.keys(), authors.values())
-                ax.get_yaxis().get_major_formatter().set_useOffset(False)
+                ax.scatter(list(authors.keys()), list(authors.values()))
+                ax.get_yaxis().get_major_formatter().set_useOffset(False)  # type: ignore
                 ax.set_ylabel("total LoC changed")
                 ax.set_yscale("log")
                 ax.set_title(repo.name)

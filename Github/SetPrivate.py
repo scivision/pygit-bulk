@@ -12,6 +12,7 @@ example:
 """
 
 from argparse import ArgumentParser
+
 import gitbulk as gb
 
 

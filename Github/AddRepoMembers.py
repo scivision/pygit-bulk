@@ -35,12 +35,13 @@ def main():
 
     fn = Path(p.fn).expanduser()
 
-    if fn.suffix in (".xls", ".xlsx"):
-        teams = pandas.read_excel(fn, usecols=p.col).squeeze().dropna()
-    elif fn.suffix == ".csv":
-        teams = pandas.read_csv(fn, usecols=p.col).squeeze().dropna()
-    else:
-        raise ValueError(f"Unknown file type {fn}")
+    match fn.suffix:
+        case ".xls" | ".xlsx":
+            teams = pandas.read_excel(fn, usecols=p.col).squeeze().dropna()
+        case ".csv":
+            teams = pandas.read_csv(fn, usecols=p.col).squeeze().dropna()
+        case _:
+            raise ValueError(f"Unknown file type {fn}")
 
     if not teams.ndim == 2:
         raise ValueError(
@@ -55,12 +56,13 @@ def main():
 
 def adder(teams: pandas.DataFrame, stem: str, private: bool, create: bool, op, sess):
     for _, row in teams.iterrows():
-        if row.size == 3:
-            repo_name = f"{stem}{row[TEAMS]:02.0f}-{row[NAME]}"
-        elif row.size == 2:
-            repo_name = f"{stem}{row[TEAMS]}"
-        else:
-            raise ValueError("I expect team number OR team number and team name")
+        match row.size:
+            case 3:
+                repo_name = f"{stem}{row[TEAMS]:02.0f}-{row[NAME]}"
+            case 2:
+                repo_name = f"{stem}{row[TEAMS]}"
+            case _:
+                raise ValueError("I expect team number OR team number and team name")
 
         login = row[USERNAME].strip()
         try:

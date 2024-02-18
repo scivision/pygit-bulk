@@ -11,7 +11,6 @@ oauth token must have "write:org" and public_repo (or repo for private) permissi
 https://developer.github.com/v3/repos/#oauth-scope-requirements
 """
 
-from __future__ import annotations
 import sys
 import logging
 import pandas
@@ -38,12 +37,13 @@ def main():
 
     fn = Path(p.fn).expanduser()
 
-    if fn.suffix in (".xls", ".xlsx"):
-        teams = pandas.read_excel(fn, usecols=p.col).squeeze().dropna()
-    elif fn.suffix == ".csv":
-        teams = pandas.read_csv(fn, usecols=p.col).squeeze().dropna()
-    else:
-        raise ValueError(f"Unknown file type {fn}")
+    match fn.suffix:
+        case ".xls" | ".xlsx":
+            teams = pandas.read_excel(fn, usecols=p.col).squeeze().dropna()
+        case ".csv":
+            teams = pandas.read_csv(fn, usecols=p.col).squeeze().dropna()
+        case _:
+            raise ValueError(f"Unknown file type {fn}")
 
     if not teams.ndim == 2:
         raise ValueError(
@@ -63,12 +63,13 @@ def adder(teams: pandas.DataFrame, stem: str, create: bool, op, sess) -> list[tu
     failed: list[tuple[str, str, str]] = []
 
     for _, row in teams.iterrows():
-        if row.size == 3:
-            team_name = f"{stem}{row[TEAMS]:02.0f}-{row[NAME].strip().replace(' ', '-')}"
-        elif row.size == 2:
-            team_name = f"{stem}{row[TEAMS]}"
-        else:
-            raise ValueError("I expect team number OR team number and team name")
+        match row.size:
+            case 3:
+                team_name = f"{stem}{row[TEAMS]:02.0f}-{row[NAME].strip().replace(' ', '-')}"
+            case 2:
+                team_name = f"{stem}{row[TEAMS]}"
+            case _:
+                raise ValueError("I expect team number OR team number and team name")
 
         login = row[USERNAME].strip()
         try:

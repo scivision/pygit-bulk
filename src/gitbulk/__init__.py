@@ -5,7 +5,7 @@ Note: the "fine-grained" Oauth didn't work for organizations in Nov 2022.
 The "classic" Oauth does work for organizations.
 """
 
-from __future__ import annotations
+
 from pathlib import Path
 from datetime import datetime
 import logging

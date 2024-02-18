@@ -29,12 +29,13 @@ def main():
 
     fn = Path(p.fn).expanduser()
 
-    if fn.suffix in {".xls", ".xlsx"}:
-        users = pandas.read_excel(fn, usecols=p.col).squeeze().dropna()
-    elif fn.suffix == ".csv":
-        users = pandas.read_csv(fn, usecols=[p.col]).squeeze().dropna()
-    else:
-        raise ValueError(f"Unknown file type {fn}")
+    match fn.suffix:
+        case ".xls" | ".xlsx":
+            users = pandas.read_excel(fn, usecols=p.col).squeeze().dropna()
+        case ".csv":
+            users = pandas.read_csv(fn, usecols=[p.col]).squeeze().dropna()
+        case _:
+            raise ValueError(f"Unknown file type {fn}")
 
     if not users.ndim == 1:
         raise ValueError("need to have member names. Check that -col argument matches spreadsheet.")

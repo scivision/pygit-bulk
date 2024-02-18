@@ -14,7 +14,7 @@ example
 As a first pass, just shows total LoC changed. Future: plot commit vs. time.
 """
 
-from __future__ import annotations
+
 import argparse
 from pathlib import Path
 
